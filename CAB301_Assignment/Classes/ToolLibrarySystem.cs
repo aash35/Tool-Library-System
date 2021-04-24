@@ -4,46 +4,46 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assignment.Classes
+namespace Assignment
 {
-    class ToolLibrarySystem : iToolLibrarySystem
+    public class ToolLibrarySystem : iToolLibrarySystem
     {
-        public void add(iTool aTool)
+        public void add(Tool aTool)
         {
             throw new NotImplementedException();
         }
 
-        public void add(iTool aTool, int quantity)
+        public void add(Tool aTool, int quantity)
         {
             throw new NotImplementedException();
         }
 
-        public void add(iMember aMember)
+        public void add(Member aMember)
         {
             throw new NotImplementedException();
         }
 
-        public void borrowTool(iMember aMember, iTool aTool)
+        public void borrowTool(Member aMember, Tool aTool)
         {
             throw new NotImplementedException();
         }
 
-        public void delete(iTool aTool)
+        public void delete(Tool aTool)
         {
             throw new NotImplementedException();
         }
 
-        public void delete(iTool aTool, int quantity)
+        public void delete(Tool aTool, int quantity)
         {
             throw new NotImplementedException();
         }
 
-        public void delete(iMember aMember)
+        public void delete(Member aMember)
         {
             throw new NotImplementedException();
         }
 
-        public void displayBorrowingTools(iMember aMember)
+        public void displayBorrowingTools(Member aMember)
         {
             throw new NotImplementedException();
         }
@@ -58,12 +58,12 @@ namespace Assignment.Classes
             throw new NotImplementedException();
         }
 
-        public string[] listTools(iMember aMember)
+        public string[] listTools(Member aMember)
         {
             throw new NotImplementedException();
         }
 
-        public void returnTool(iMember aMember, iTool aTool)
+        public void returnTool(Member aMember, Tool aTool)
         {
             throw new NotImplementedException();
         }

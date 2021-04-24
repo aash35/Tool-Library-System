@@ -36,10 +36,10 @@ namespace Assignment
             get;
         }
 
-        void addTool(iTool aTool); //add a given tool to the list of tools that this member is currently holding
+        void addTool(Tool aTool); //add a given tool to the list of tools that this member is currently holding
 
-        void deleteTool(iTool aTool); //delete a given tool from the list of tools that this member is currently holding
+        void deleteTool(Tool aTool); //delete a given tool from the list of tools that this member is currently holding
 
-        override string ToString(); //return a string containing the first name, lastname, and contact phone number of this memeber
+        string ToString(); //return a string containing the first name, lastname, and contact phone number of this memeber
     }
 }

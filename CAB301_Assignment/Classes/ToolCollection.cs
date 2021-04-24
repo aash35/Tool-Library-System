@@ -4,28 +4,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assignment.Classes
+namespace Assignment
 {
-    class ToolCollection : iToolCollection
+    public class ToolCollection : iToolCollection
     {
         public int Number => throw new NotImplementedException();
 
-        public void add(iTool aTool)
+        public void add(Tool aTool)
         {
             throw new NotImplementedException();
         }
 
-        public void delete(iTool aTool)
+        public void delete(Tool aTool)
         {
             throw new NotImplementedException();
         }
 
-        public bool search(iTool aTool)
+        public bool search(Tool aTool)
         {
             throw new NotImplementedException();
         }
 
-        public iTool[] toArray()
+        public Tool[] toArray()
         {
             throw new NotImplementedException();
         }

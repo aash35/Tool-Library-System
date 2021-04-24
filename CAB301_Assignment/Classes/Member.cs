@@ -6,23 +6,68 @@ using System.Threading.Tasks;
 
 namespace Assignment
 {
-    class Member : iMember
+    public class Member : iMember, IComparable<Member>
     {
-        public string FirstName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string LastName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string ContactNumber { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string PIN { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string ContactNumber { get; set; }
+        public string PIN { get; set; }
 
-        public string[] Tools => throw new NotImplementedException();
+        public string[] Tools { get; } = new string[3];
 
-        public void addTool(iTool aTool)
+        public Member(string firstName, string lastName, string number, string password)
         {
-            throw new NotImplementedException();
+            FirstName = firstName;
+            LastName = lastName;
+            ContactNumber = number;
+            PIN = password;
         }
 
-        public void deleteTool(iTool aTool)
+        public void addTool(Tool aTool)
         {
-            throw new NotImplementedException();
+            for(int i = 0; i < Tools.Length; i++)
+            {
+                if (Tools[i] == null)
+                {
+                    Tools[i] = aTool.Name;
+                }
+            }
+        }
+
+        public void deleteTool(Tool aTool)
+        {
+            for (int i = 0; i < Tools.Length; i++)
+            {
+                if (Tools[i].Contains(aTool.Name))
+                {
+                    Tools[i] = null;
+                    i = Tools.Length;
+                }
+            }
+        }
+
+        public override string ToString()
+        {
+            string returnStatement = String.Format("Name: {0} {1}\nPhone Number: {2}", FirstName,LastName, ContactNumber);
+            return returnStatement;
+        }
+
+        public int CompareTo(Member other)
+        {
+            if (this.LastName.CompareTo(other.LastName) < 0)
+            {
+                return -1;
+            }
+            else if (this.LastName.CompareTo(other.LastName) == 0 && (this.FirstName.CompareTo(other.FirstName) == 0))
+            {
+                return 0;
+            }
+            else if (this.LastName.CompareTo(other.LastName) == 0 && (this.FirstName.CompareTo(other.FirstName) < 0))
+            {
+                return -1;
+            }
+            return 1;
+
         }
     }
 }

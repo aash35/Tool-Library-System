@@ -6,23 +6,38 @@ using System.Threading.Tasks;
 
 namespace Assignment
 {
-    class Tool : iTool
+    public class Tool : iTool
     {
-        public string Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public int Quantity { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public int AvailableQuantity { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public int NoBorrowings { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string Name { get; set; }
+        public int Quantity { get; set; }
+        public int AvailableQuantity { get; set; }
+        public int NoBorrowings { get; set; }
 
-        public iMemberCollection GetBorrowers => throw new NotImplementedException();
-
-        public void addBorrower(iMember aMember)
+        public Tool(string name, int quantity)
         {
-            throw new NotImplementedException();
+            Name = name;
+            Quantity = quantity;
+            //default AvailableQuantity is the total quantity
+            AvailableQuantity = quantity;
+            //default there are no borrowings
+            NoBorrowings = 0;
         }
 
-        public void deleteBorrower(iMember aMember)
+        public MemberCollection GetBorrowers { get; }
+
+        public void addBorrower(Member aMember)
         {
-            throw new NotImplementedException();
+            GetBorrowers.add(aMember);
+        }
+
+        public void deleteBorrower(Member aMember)
+        {
+            GetBorrowers.delete(aMember);
+        }
+        public override string ToString()
+        {
+            string returnStatement = String.Format("Name: {0}\nAvailable Quantity: {1}", Name, Quantity);
+            return returnStatement;
         }
     }
 }

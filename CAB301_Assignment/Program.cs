@@ -6,7 +6,12 @@ namespace Assignment
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Member newMember = new Member("Adrian", "Ash", "0000000000", "helloworld");
+            Tool newTool = new Tool("Jack Hammer", 5);
+
+            Console.WriteLine(newMember);
+            Console.WriteLine(newTool);
+            Console.ReadLine();
         }
     }
 }

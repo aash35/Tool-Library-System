@@ -1,0 +1,16 @@
+C:\Users\User\Desktop\CAB301\Assignment\CAB301_Applied_Project\CAB301_Assignment\bin\Debug\net5.0\CAB301_Assignment.exe
+C:\Users\User\Desktop\CAB301\Assignment\CAB301_Applied_Project\CAB301_Assignment\bin\Debug\net5.0\CAB301_Assignment.deps.json
+C:\Users\User\Desktop\CAB301\Assignment\CAB301_Applied_Project\CAB301_Assignment\bin\Debug\net5.0\CAB301_Assignment.runtimeconfig.json
+C:\Users\User\Desktop\CAB301\Assignment\CAB301_Applied_Project\CAB301_Assignment\bin\Debug\net5.0\CAB301_Assignment.runtimeconfig.dev.json
+C:\Users\User\Desktop\CAB301\Assignment\CAB301_Applied_Project\CAB301_Assignment\bin\Debug\net5.0\CAB301_Assignment.dll
+C:\Users\User\Desktop\CAB301\Assignment\CAB301_Applied_Project\CAB301_Assignment\bin\Debug\net5.0\ref\CAB301_Assignment.dll
+C:\Users\User\Desktop\CAB301\Assignment\CAB301_Applied_Project\CAB301_Assignment\bin\Debug\net5.0\CAB301_Assignment.pdb
+C:\Users\User\Desktop\CAB301\Assignment\CAB301_Applied_Project\CAB301_Assignment\obj\Debug\net5.0\CAB301_Assignment.csprojAssemblyReference.cache
+C:\Users\User\Desktop\CAB301\Assignment\CAB301_Applied_Project\CAB301_Assignment\obj\Debug\net5.0\CAB301_Assignment.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\Desktop\CAB301\Assignment\CAB301_Applied_Project\CAB301_Assignment\obj\Debug\net5.0\CAB301_Assignment.AssemblyInfoInputs.cache
+C:\Users\User\Desktop\CAB301\Assignment\CAB301_Applied_Project\CAB301_Assignment\obj\Debug\net5.0\CAB301_Assignment.AssemblyInfo.cs
+C:\Users\User\Desktop\CAB301\Assignment\CAB301_Applied_Project\CAB301_Assignment\obj\Debug\net5.0\CAB301_Assignment.csproj.CoreCompileInputs.cache
+C:\Users\User\Desktop\CAB301\Assignment\CAB301_Applied_Project\CAB301_Assignment\obj\Debug\net5.0\CAB301_Assignment.dll
+C:\Users\User\Desktop\CAB301\Assignment\CAB301_Applied_Project\CAB301_Assignment\obj\Debug\net5.0\ref\CAB301_Assignment.dll
+C:\Users\User\Desktop\CAB301\Assignment\CAB301_Applied_Project\CAB301_Assignment\obj\Debug\net5.0\CAB301_Assignment.pdb
+C:\Users\User\Desktop\CAB301\Assignment\CAB301_Applied_Project\CAB301_Assignment\obj\Debug\net5.0\CAB301_Assignment.genruntimeconfig.cache
