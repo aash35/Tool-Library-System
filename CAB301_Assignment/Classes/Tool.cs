@@ -12,6 +12,7 @@ namespace Assignment
         public int Quantity { get; set; }
         public int AvailableQuantity { get; set; }
         public int NoBorrowings { get; set; }
+        public MemberCollection GetBorrowers { get; }
 
         public Tool(string name, int quantity)
         {
@@ -23,20 +24,29 @@ namespace Assignment
             NoBorrowings = 0;
         }
 
-        public MemberCollection GetBorrowers { get; }
 
         public void addBorrower(Member aMember)
         {
-            GetBorrowers.add(aMember);
+            if(AvailableQuantity > 0)
+            {
+                GetBorrowers.add(aMember);
+                NoBorrowings++;
+                AvailableQuantity--;
+            }
+            else
+            {
+                string message = "None available to borrow";
+            }
         }
 
         public void deleteBorrower(Member aMember)
         {
             GetBorrowers.delete(aMember);
+            AvailableQuantity++;
         }
         public override string ToString()
         {
-            string returnStatement = String.Format("Name: {0}\nAvailable Quantity: {1}", Name, Quantity);
+            string returnStatement = String.Format("Name: {0}\nAvailable Quantity: {1}", Name, AvailableQuantity);
             return returnStatement;
         }
     }

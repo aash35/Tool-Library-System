@@ -30,6 +30,7 @@ namespace Assignment
                 if (Tools[i] == null)
                 {
                     Tools[i] = aTool.Name;
+                    i = Tools.Length;
                 }
             }
         }
@@ -38,7 +39,7 @@ namespace Assignment
         {
             for (int i = 0; i < Tools.Length; i++)
             {
-                if (Tools[i].Contains(aTool.Name))
+                if (Tools[i].Equals(aTool.Name))
                 {
                     Tools[i] = null;
                     i = Tools.Length;

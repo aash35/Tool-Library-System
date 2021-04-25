@@ -8,26 +8,85 @@ namespace Assignment
 {
     public class ToolCollection : iToolCollection
     {
-        public int Number => throw new NotImplementedException();
+
+        //private string toolTypesArray;
+        //could use with constructor to define teh tool types of a catergory?
+
+
+        public int Number { get; set; }
+        private Tool[] toolArray;
+
+        public ToolCollection()
+        {
+            Number = 0;
+            toolArray = new Tool[1];
+        }
 
         public void add(Tool aTool)
         {
-            throw new NotImplementedException();
+            if (Number >= toolArray.Length)
+            {
+                dynamicArray();
+            }
+            for (int i = 0; i < toolArray.Length; i++)
+            {
+                if (toolArray[i] == null)
+                {
+                    toolArray[i] = aTool;
+                }
+            }
+            Number++;
         }
 
         public void delete(Tool aTool)
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < toolArray.Length; i++)
+            {
+                if (toolArray[i] != null)
+                {
+                    if (toolArray[i].Name.Equals(aTool.Name))
+                    {
+                        toolArray[i] = null;
+                    }
+                }
+            }
         }
+        
+
 
         public bool search(Tool aTool)
         {
-            throw new NotImplementedException();
+            for(int i = 0; i < toolArray.Length; i++)
+            {
+                if (toolArray[i] != null)
+                {
+                    if (toolArray[i].Name.Equals(aTool.Name))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
+        /// <summary>
+        /// create this!!!!
+        /// </summary>
+        /// <returns></returns>
         public Tool[] toArray()
         {
             throw new NotImplementedException();
+        }
+        private void dynamicArray()
+        {
+            int tempLength = (toolArray.Length * 2);
+            Tool[] tempArray = new Tool[tempLength];
+            for(int i = 0; i < toolArray.Length; i++)
+            {
+                tempArray[i] = toolArray[i];
+            }
+            toolArray = tempArray;
+
         }
     }
 }
