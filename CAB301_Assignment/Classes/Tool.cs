@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assignment
 {
-    public class Tool : iTool
+    public class Tool : iTool, IComparable<Tool>
     {
         private string name;
         private int quantity;
@@ -73,6 +73,22 @@ namespace Assignment
         {
             string returnStatement = String.Format("Name: {0}\nAvailable Quantity: {1}", Name, AvailableQuantity);
             return returnStatement;
+        }
+
+        public int CompareTo(Tool other)
+        {
+            if (this.name.CompareTo(other.name) < 0)
+            {
+                return -1;
+            }
+            else if (this.name.CompareTo(other.name) == 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
+            }
         }
     }
 }

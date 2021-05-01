@@ -44,7 +44,13 @@ namespace Assignment
                 PaintingTools, ElectronicTools, ElectricityTools, AutomotiveTools
             };
 
-            UI userInterface = new UI();
+            ToolLibrarySystem mainSystem = new ToolLibrarySystem();
+            MemberCollection mainMemeber = new MemberCollection();
+            mainMemeber.add(new Member("Adrian","Ash","123123123","0000"));
+            initialiseToolLibrary(ref mainSystem);
+
+
+            UI userInterface = new UI(ref mainSystem, ref mainMemeber);
 
             Console.WriteLine(toolTypes[1][1]);
             Console.WriteLine(toolTypes[3][5]);
@@ -52,20 +58,6 @@ namespace Assignment
             Console.WriteLine(toolTypes[3][1]);
             Console.WriteLine(toolTypes[1][3]);
             Console.WriteLine(toolTypes[7][2]);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             Member newMember1;
             Member newMember2;
@@ -131,6 +123,7 @@ namespace Assignment
 
 
             }
+
             void toolTest()
             {
                 newTool1 = new Tool("Jack Hammer", 5);
@@ -141,6 +134,10 @@ namespace Assignment
 
         }
 
-        
+        private static void initialiseToolLibrary(ref ToolLibrarySystem focusSystem)
+        {
+            Member testMember = new Member("Adrian", "Ash","0459945523", "4112");
+            focusSystem.add(testMember);
+        }
     }
 }

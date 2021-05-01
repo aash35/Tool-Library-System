@@ -8,9 +8,13 @@ namespace Assignment
 {
     public class UI
     {
-        public UI()
+        private ToolLibrarySystem systemLibrary;
+        private MemberCollection systemMembersTest;
+        public UI(ref ToolLibrarySystem toolLibrarySystem, ref MemberCollection membersCollection)
         {
-            
+            systemLibrary = toolLibrarySystem;
+            systemMembersTest = membersCollection;
+
             string userSelection = "";
             bool menuLoop = false;
 
@@ -50,14 +54,20 @@ namespace Assignment
             string username = Console.ReadLine();
             Console.Write("Enter your 4 digit PIN: ");
             string password = Console.ReadLine();
-            if (username.Equals("test") & password.Equals("test"))
+            Member[] members = systemMembersTest.toArray();
+            foreach(Member element in members)
             {
-                Console.Clear();
-                displayMemberMenu(ref menuLoop);
-            }
-            else
-            {
-                menuLoop = true;
+                string usernameCheck = element.LastName + element.FirstName;
+
+                if (username.Equals(usernameCheck) & password.Equals(element.PIN))
+                {
+                    Console.Clear();
+                    displayMemberMenu(ref menuLoop);
+                }
+                else
+                {
+                    menuLoop = true;
+                }
             }
 
         }

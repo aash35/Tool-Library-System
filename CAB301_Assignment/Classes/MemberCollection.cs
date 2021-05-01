@@ -150,23 +150,23 @@ namespace Assignment
             }
 
         }
-        private bool searchTree(Member aMember, MemberNode root)
+        private bool searchTree(Member aMember, MemberNode node)
         {
             //could change this to the member class Icomparable
-            if (root != null)
+            if (node != null)
             {
-                if (aMember.CompareTo(root.Member) == 0)
+                if (aMember.CompareTo(node.Member) == 0)
                 {
                     return true;
                 }
-                else if (aMember.CompareTo(root.Member) < 0)
+                else if (aMember.CompareTo(node.Member) < 0)
                 {
 
-                    return searchTree(aMember, root.Lchild);
+                    return searchTree(aMember, node.Lchild);
                 }
                 else
                 {
-                    return searchTree(aMember, root.Rchild);
+                    return searchTree(aMember, node.Rchild);
                 }
             }
             else

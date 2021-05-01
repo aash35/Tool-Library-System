@@ -20,7 +20,7 @@ namespace Assignment
 
 
 
-        private MemberCollection membersOfLibrary { get; } = new MemberCollection();
+        private MemberCollection membersOfLibrary = new MemberCollection();
 
         //Constructor
         public ToolLibrarySystem()
@@ -44,17 +44,17 @@ namespace Assignment
                 electricityTools[i] = new ToolCollection();
                 automotiveTools[i] = new ToolCollection();
             }
-            flooringTools[6] = new ToolCollection();
-            measuringTools[6] = new ToolCollection();
-            cleaningTools[6] = new ToolCollection();
-            paintingTools[6] = new ToolCollection();
-            automotiveTools[6] = new ToolCollection();
+            flooringTools[5] = new ToolCollection();
+            measuringTools[5] = new ToolCollection();
+            cleaningTools[5] = new ToolCollection();
+            paintingTools[5] = new ToolCollection();
+            automotiveTools[5] = new ToolCollection();
         }
 
         public void add(Tool aTool)
         {
             throw new NotImplementedException();
-        }
+        } 
 
         public void add(Tool aTool, int quantity)
         {
@@ -63,12 +63,37 @@ namespace Assignment
 
         public void add(Member aMember)
         {
-            throw new NotImplementedException();
+            if (membersOfLibrary.search(aMember) != true)
+            {
+                membersOfLibrary.add(aMember);
+            }
+            else
+            {
+                Console.WriteLine("This memeber is already added");
+            }
         }
 
         public void borrowTool(Member aMember, Tool aTool)
         {
-            throw new NotImplementedException();
+            if (membersOfLibrary.search(aMember))
+            {
+                Member theMemeber = selectMemeber(aMember);
+                theMemeber.addTool(aTool);
+                //add the memeber to tool borrow list (need to find the tool first, different from the above aTool)
+            }
+        }
+
+        private Member selectMemeber(Member aMember)
+        {
+            Member[] arrayOfMember = membersOfLibrary.toArray();
+            for (int i = 0; i < arrayOfMember.Length; i++)
+            {
+                if(arrayOfMember[i].CompareTo(aMember) == 0)
+                {
+                    return arrayOfMember[i];
+                }
+            }
+            return null;
         }
 
         public void delete(Tool aTool)
@@ -83,12 +108,27 @@ namespace Assignment
 
         public void delete(Member aMember)
         {
-            throw new NotImplementedException();
+            if(membersOfLibrary.search(aMember) == true)
+            {
+                membersOfLibrary.delete(aMember);
+            }
+            else
+            {
+                Console.WriteLine("Memeber does not exist");
+            }
         }
 
         public void displayBorrowingTools(Member aMember)
         {
-            throw new NotImplementedException();
+            aMember = selectMemeber(aMember);
+            string[] borrowedTools = aMember.Tools;
+            foreach(string element in borrowedTools)
+            {
+                if (!string.IsNullOrEmpty(element))
+                {
+                    Console.WriteLine(element);
+                }
+            }
         }
 
         public void displayTools(string aToolType)
@@ -103,12 +143,18 @@ namespace Assignment
 
         public string[] listTools(Member aMember)
         {
+
             throw new NotImplementedException();
         }
 
         public void returnTool(Member aMember, Tool aTool)
         {
-            throw new NotImplementedException();
+            if (membersOfLibrary.search(aMember))
+            {
+                Member theMemeber = selectMemeber(aMember);
+                theMemeber.deleteTool(aTool);
+                //delete the memeber from tool borrowlist (need to find the tool first, different from the above aTool)
+            }
         }
     }
     /*

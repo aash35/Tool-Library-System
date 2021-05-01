@@ -9,10 +9,6 @@ namespace Assignment
     public class ToolCollection : iToolCollection
     {
 
-        //private string toolTypesArray;
-        //could use with constructor to define teh tool types of a catergory?
-
-
         private Tool[] toolArray;
         private int number;
         public int Number
@@ -56,8 +52,6 @@ namespace Assignment
                 }
             }
         }
-        
-
 
         public bool search(Tool aTool)
         {
@@ -74,13 +68,9 @@ namespace Assignment
             return false;
         }
 
-        /// <summary>
-        /// create this!!!!
-        /// </summary>
-        /// <returns></returns>
         public Tool[] toArray()
         {
-            throw new NotImplementedException();
+            return toolArray;
         }
         private void dynamicArray()
         {
@@ -91,7 +81,6 @@ namespace Assignment
                 tempArray[i] = toolArray[i];
             }
             toolArray = tempArray;
-
         }
     }
 }
