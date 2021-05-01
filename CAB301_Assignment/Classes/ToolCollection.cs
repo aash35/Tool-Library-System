@@ -13,8 +13,13 @@ namespace Assignment
         //could use with constructor to define teh tool types of a catergory?
 
 
-        public int Number { get; set; }
         private Tool[] toolArray;
+        private int number;
+        public int Number
+        {
+            get { return number; }
+            set { number = value; }
+        }
 
         public ToolCollection()
         {

@@ -8,11 +8,36 @@ namespace Assignment
 {
     public class Tool : iTool
     {
-        public string Name { get; set; }
-        public int Quantity { get; set; }
-        public int AvailableQuantity { get; set; }
-        public int NoBorrowings { get; set; }
-        public MemberCollection GetBorrowers { get; }
+        private string name;
+        private int quantity;
+        private int availablequantity;
+        private int noborrowings;
+        private MemberCollection members;
+
+        public string Name
+        {
+            get { return name; }
+            set { name = value; }
+        }
+        public int Quantity
+        {
+            get { return quantity; }
+            set { quantity = value; }
+        }
+        public int AvailableQuantity
+        {
+            get { return availablequantity; }
+            set { availablequantity = value; }
+        }
+        public int NoBorrowings
+        {
+            get { return noborrowings; }
+            set { noborrowings = value; } 
+        }
+        public MemberCollection GetBorrowers
+        {
+            get { return members; }
+        }
 
         public Tool(string name, int quantity)
         {

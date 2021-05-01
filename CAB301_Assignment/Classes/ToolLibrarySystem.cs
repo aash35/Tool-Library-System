@@ -8,6 +8,49 @@ namespace Assignment
 {
     public class ToolLibrarySystem : iToolLibrarySystem
     {
+        private ToolCollection[] gardeningTools  = new ToolCollection[5];
+        private ToolCollection[] flooringTools = new ToolCollection[6];
+        private ToolCollection[] fencingTools = new ToolCollection[5];
+        private ToolCollection[] measuringTools = new ToolCollection[6];
+        private ToolCollection[] cleaningTools = new ToolCollection[6];
+        private ToolCollection[] paintingTools = new ToolCollection[6];
+        private ToolCollection[] electronicTools = new ToolCollection[5];
+        private ToolCollection[] electricityTools = new ToolCollection[5];
+        private ToolCollection[] automotiveTools = new ToolCollection[6];
+
+
+
+        private MemberCollection membersOfLibrary { get; } = new MemberCollection();
+
+        //Constructor
+        public ToolLibrarySystem()
+        {
+            //create all the ToolCollections needed for the Categories
+            initialiseToolCollections();
+
+        }
+
+        private void initialiseToolCollections()
+        {
+            for(int i = 0;i < 5; i++)
+            {
+                gardeningTools[i] = new ToolCollection();
+                flooringTools[i] = new ToolCollection();
+                fencingTools[i] = new ToolCollection();
+                measuringTools[i] = new ToolCollection();
+                cleaningTools[i] = new ToolCollection();
+                paintingTools[i] = new ToolCollection();
+                electronicTools[i] = new ToolCollection();
+                electricityTools[i] = new ToolCollection();
+                automotiveTools[i] = new ToolCollection();
+            }
+            flooringTools[6] = new ToolCollection();
+            measuringTools[6] = new ToolCollection();
+            cleaningTools[6] = new ToolCollection();
+            paintingTools[6] = new ToolCollection();
+            automotiveTools[6] = new ToolCollection();
+        }
+
         public void add(Tool aTool)
         {
             throw new NotImplementedException();

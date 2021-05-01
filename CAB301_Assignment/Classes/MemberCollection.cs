@@ -12,10 +12,16 @@ namespace Assignment
     public class MemberCollection : iMemberCollection
     {
         private MemberNode root;
-        public int Number { get; set; } = 0;
+        private int number;
+        public int Number
+        {
+            get { return number; }
+            set { number = value; }
+        }
         public MemberCollection()
         {
             root = null;
+            Number = 0;
         }
 
         public void add(Member aMember)
@@ -146,6 +152,7 @@ namespace Assignment
         }
         private bool searchTree(Member aMember, MemberNode root)
         {
+            //could change this to the member class Icomparable
             if (root != null)
             {
                 if (aMember.CompareTo(root.Member) == 0)

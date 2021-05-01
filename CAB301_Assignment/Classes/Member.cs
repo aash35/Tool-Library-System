@@ -8,12 +8,35 @@ namespace Assignment
 {
     public class Member : iMember, IComparable<Member>
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string ContactNumber { get; set; }
-        public string PIN { get; set; }
+        private string firstname;
+        private string lastname;
+        private string contactnumber;
+        private string pin;
+        private string[] tools = new string[3];
 
-        public string[] Tools { get; } = new string[3];
+        public string FirstName {
+            get { return firstname; }
+            set { firstname = value; }
+        }
+        public string LastName
+        {
+            get { return lastname; }
+            set { lastname = value; }
+        }
+        public string ContactNumber
+        {
+            get { return contactnumber; }
+            set { contactnumber = value; }
+        }
+        public string PIN
+        {
+            get { return pin; }
+            set { pin = value; }
+        }
+
+        public string[] Tools {
+            get { return tools; }
+        }
 
         public Member(string firstName, string lastName, string number, string password)
         {
