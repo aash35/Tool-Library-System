@@ -44,13 +44,11 @@ namespace Assignment
                 PaintingTools, ElectronicTools, ElectricityTools, AutomotiveTools
             };
 
-            ToolLibrarySystem mainSystem = new ToolLibrarySystem();
-            MemberCollection mainMemeber = new MemberCollection();
-            mainMemeber.add(new Member("Adrian","Ash","123123123","0000"));
-            initialiseToolLibrary(ref mainSystem);
 
-
-            UI userInterface = new UI(ref mainSystem, ref mainMemeber);
+            ToolLibrarySystem library = new ToolLibrarySystem(categories, toolTypes);
+            UI menus = new UI(library, categories, toolTypes);
+            /*
+             ******** Testing Purposes ************
 
             Console.WriteLine(toolTypes[1][1]);
             Console.WriteLine(toolTypes[3][5]);
@@ -131,13 +129,8 @@ namespace Assignment
                 newTool3 = new Tool("Jack Saw", 5);
                 newTool4 = new Tool("Scissors", 5);
             }
+            */
 
-        }
-
-        private static void initialiseToolLibrary(ref ToolLibrarySystem focusSystem)
-        {
-            Member testMember = new Member("Adrian", "Ash","0459945523", "4112");
-            focusSystem.add(testMember);
         }
     }
 }
