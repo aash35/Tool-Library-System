@@ -12,7 +12,7 @@ namespace Assignment
         private int quantity;
         private int availablequantity;
         private int noborrowings;
-        private MemberCollection members;
+        private MemberCollection members = new MemberCollection();
 
         public string Name
         {
@@ -54,13 +54,9 @@ namespace Assignment
         {
             if(AvailableQuantity > 0)
             {
-                GetBorrowers.add(aMember);
+                members.add(aMember);
                 NoBorrowings++;
                 AvailableQuantity--;
-            }
-            else
-            {
-                string message = "None available to borrow";
             }
         }
 

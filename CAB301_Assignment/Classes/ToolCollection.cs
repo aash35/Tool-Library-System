@@ -34,9 +34,10 @@ namespace Assignment
                 if (toolArray[i] == null)
                 {
                     toolArray[i] = aTool;
+                    Number++;
+                    i = toolArray.Length;
                 }
             }
-            Number++;
         }
 
         public void delete(Tool aTool)

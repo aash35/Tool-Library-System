@@ -11,6 +11,7 @@ namespace Assignment
         private string[] categories;
         private string[][] toolTypes;
 
+
         private ToolCollection[] gardeningTools  = new ToolCollection[5];
         private ToolCollection[] flooringTools = new ToolCollection[6];
         private ToolCollection[] fencingTools = new ToolCollection[5];
@@ -20,7 +21,6 @@ namespace Assignment
         private ToolCollection[] electronicTools = new ToolCollection[5];
         private ToolCollection[] electricityTools = new ToolCollection[5];
         private ToolCollection[] automotiveTools = new ToolCollection[6];
-
 
 
         private MemberCollection membersOfLibrary = new MemberCollection();
@@ -34,12 +34,17 @@ namespace Assignment
             categories = libraryCategories;
             toolTypes = libraryToolTypes;
 
-
-            membersOfLibrary.add(new Member("User", "Test", "1234156121", "0000"));
-            //initialiseMenus();
+            //Testing Purposes
+            membersOfLibrary.add(new Member("user", "user", "12321", "0000"));
+            testTools();
         }
+
         
 
+        //important to make it so if the method is called by itself it works
+        //split into two sections
+        //Part 1: the ui and creating the object
+        //Part 2: Placing the object
         public void add(Tool aTool)
         {
             throw new NotImplementedException();
@@ -62,13 +67,100 @@ namespace Assignment
             }
         }
 
+        /// <summary>
+        /// Allows members to select a tool to borrow from the library. Selected through Category
+        /// and Tool Type menus. If the member is allowed to borrow the tool and there are tool avaible
+        /// the member is added to the tools borrowing memberCollection and the tool is added to the members borrowed tool array
+        /// </summary>
+        /// <param name="aMember">The UI passes the currently logged in member which is used 
+        /// to match to a member in the tool library system</param>
+        /// <param name="aTool">The Tool is initally empty but then updated when the member selects a tool
+        /// from the Category and Tool Type menu system</param>
         public void borrowTool(Member aMember, Tool aTool)
         {
             if (membersOfLibrary.search(aMember))
             {
-                Member theMemeber = selectMemeber(aMember);
-                theMemeber.addTool(aTool);
-                //add the memeber to tool borrow list (need to find the tool first, different from the above aTool)
+                int cat = 0;
+                int type = 0;
+                bool returnFlag = false;
+                Console.Clear();
+                Console.WriteLine("Library System - Display Tools By Tool Type");
+                Console.WriteLine("===========================================");
+                selectFromOptions(ref cat, ref type, ref returnFlag);
+                if(returnFlag == false)
+                {
+                    ToolCollection[] finalSelectedCategory = selectRightCategory(cat);
+                    int number = finalSelectedCategory[type].Number;
+                    Tool[] toolsFromSelected = finalSelectedCategory[type].toArray();
+
+
+                    Console.Clear();
+                    Console.WriteLine("List of Tools");
+                    Console.WriteLine("============================================================");
+                    displayTools(number, toolsFromSelected);
+                    Console.WriteLine("============================================================");
+                    Console.WriteLine();
+                    //if there are no tools in the tool category return
+                    if (number == 0)
+                    {
+                        Console.Write("Hit any key to return to menu");
+                        Console.ReadKey();
+                    }
+                    //else make selection and add to memeber tools and borrowed tools memeberCollection
+                    else
+                    {
+                        Member theMemeber = selectMemeber(aMember);
+                        Console.Write("Please make a selection(1 - {0}, or 0 to exit): ", number);
+                        string k = Console.ReadLine();
+                        int selection;
+                        bool success = Int32.TryParse(k, out selection);
+
+                        while (success == false | selection > number | selection < 0)
+                        {
+                            Console.WriteLine("Please enter a valid menu option");
+                            k = Console.ReadLine();
+                            success = Int32.TryParse(k, out selection);
+                        }
+                        if (selection != 0)
+                        {
+                            selection--;
+
+                            Tool selectedTool = toolsFromSelected[selection];
+                            bool flag = true;
+                            for (int i = 0; i < theMemeber.Tools.Length; i++)
+                            {
+                                if (theMemeber.Tools[i] == null)
+                                {
+                                    flag = false;
+                                    if (selectedTool.AvailableQuantity > 0)
+                                    {
+                                        theMemeber.addTool(selectedTool);
+                                        selectedTool.addBorrower(theMemeber);
+                                        Console.WriteLine();
+                                        Console.WriteLine("Borrowed {0} from the library", selectedTool.Name);
+                                        Console.WriteLine();
+
+                                    }
+                                    else
+                                    {
+                                        Console.ForegroundColor = ConsoleColor.Red;
+                                        Console.WriteLine("No more tools available");
+                                        Console.ResetColor();
+                                    }
+                                    i = theMemeber.Tools.Length;
+                                }
+                            }
+                            if (flag == true)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("A Member can only borrow 3 tools at a time");
+                                Console.ResetColor();
+                            }
+                            Console.Write("Hit any key to return to menu");
+                            Console.ReadKey();
+                        }
+                    }
+                }
             }
         }
 
@@ -95,6 +187,7 @@ namespace Assignment
             }
         }
 
+
         public void displayBorrowingTools(Member aMember)
         {
             aMember = selectMemeber(aMember);
@@ -109,46 +202,35 @@ namespace Assignment
         }
 
         /// <summary>
-        /// Doesnt actually use the string parameter as it is not enough to determine  
+        /// Displays an menu that allows a user to select the category and tool type that they would
+        /// like the list of tools from
         /// </summary>
-        /// <param name="aToolType"></param>
+        /// <param name="aToolType">An empty tool type that isnt used due to parallel 
+        /// string arrays and tool type arrays</param>
         public void displayTools(string aToolType)
         {
             int cat = 0;
             int type = 0;
+            bool returnFlag = false;
             Console.Clear();
             Console.WriteLine("Library System - Display Tools By Tool Type");
             Console.WriteLine("===========================================");
-            selectFromOptions(ref cat, ref type);
-
-            ToolCollection[] finalSelectedCategory = selectRightCategory(cat);
-            int number = finalSelectedCategory[type].Number;
-            Tool[] toolsFromSelected = finalSelectedCategory[type].toArray();
-
-            Console.WriteLine();
-            Console.WriteLine("List of Tools");
-            Console.WriteLine("============================================================");
-            if (number > 0)
+            selectFromOptions(ref cat, ref type, ref returnFlag);
+            if(returnFlag == false)
             {
-                Console.WriteLine("{0, -25} {1, -3} {2, -3}", "Tool Name", "Available", "Total");
+                ToolCollection[] finalSelectedCategory = selectRightCategory(cat);
+                int number = finalSelectedCategory[type].Number;
+                Tool[] toolsFromSelected = finalSelectedCategory[type].toArray();
+                Console.Clear();
+                Console.WriteLine();
+                Console.WriteLine("List of Tools");
                 Console.WriteLine("============================================================");
-                for(int i= 0; i > toolsFromSelected.Length; i++)
-                {
-                    Tool element = toolsFromSelected[i];
-                    Console.WriteLine("{0, -25} {1, -3} {2, -3}", element.Name, element.AvailableQuantity, element.Quantity);
-                }
+                displayTools(number, toolsFromSelected);
+                Console.WriteLine("============================================================");
+                Console.WriteLine();
+                Console.Write("Hit any key to continue");
+                Console.ReadKey();
             }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("No Tools in this Tool Type");
-                Console.ResetColor();
-
-            }
-            Console.WriteLine("============================================================");
-            Console.WriteLine();
-            Console.Write("Hit any key to continue");
-            Console.ReadKey();
         }
 
 
@@ -168,13 +250,115 @@ namespace Assignment
             if (membersOfLibrary.search(aMember))
             {
                 Member theMemeber = selectMemeber(aMember);
-                theMemeber.deleteTool(aTool);
+                string[] borrowedTools = theMemeber.Tools;
+                Console.Clear();
+                Console.WriteLine("Library System - Display Borrowed Tools");
+                Console.WriteLine("===========================================");
+
+                List<string> noNullTools = new List<string>();
+                //ensure that null values in a Members Tool array dont mess with counting
+                //i.e ["ToolName2",null,"ToolName2"] will have ToolName2 labeled as three
+                for (int i = 0; i < borrowedTools.Length; i++)
+                {
+                    if(borrowedTools[i] != null)
+                    {
+                        noNullTools.Add(borrowedTools[i]);
+                    }
+                }
+
+                if (noNullTools.Count() > 0)
+                {
+                    for (int i = 0; i < noNullTools.Count(); i++)
+                    {
+                        Console.WriteLine("{0}. {1}", i + 1, noNullTools[i]);
+                    }
+                    Console.WriteLine("===========================================");
+                    Console.WriteLine();
+                    if (noNullTools.Count() == 1)
+                    {
+                        Console.Write("Please make a selection( 1 , or 0 to exit): ");
+                    }
+                    else
+                    {
+                        Console.Write("Please make a selection(1 - {0}, or 0 to exit): ", noNullTools.Count());
+                    }
+                    string k = Console.ReadLine();
+                    int selection;
+                    bool success = Int32.TryParse(k, out selection);
+                    while (success == false | selection > noNullTools.Count() | selection < 0)
+                    {
+                        Console.WriteLine("Please enter a valid menu option");
+                        k = Console.ReadLine();
+                        success = Int32.TryParse(k, out selection);
+                    }
+                    if (selection != 0)
+                    {
+                        selection--;
+
+                        string selectedTool = noNullTools[selection];
+                        Tool foundTool = fullLibraryToolNameSearch(selectedTool);
+                        theMemeber.deleteTool(foundTool);
+                        foundTool.deleteBorrower(theMemeber);
+
+                        Console.WriteLine();
+                        Console.WriteLine("Returned {0} to the library", foundTool.Name);
+                        Console.WriteLine();
+                        Console.Write("Hit any key to return to menu");
+                        Console.ReadKey();
+                    }
+
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Currently no tools borrowed");
+                    Console.ResetColor();
+                    Console.WriteLine("===========================================");
+                    Console.WriteLine();
+                    Console.Write("Hit any key to return to menu");
+                    Console.ReadKey();
+                }
+
+                //theMemeber.deleteTool(aTool);
                 //delete the memeber from tool borrowlist (need to find the tool first, different from the above aTool)
             }
         }
 
 
+
+
         //********PRIVATE METHODS ************//
+        private Tool fullLibraryToolNameSearch(string Tool)
+        {
+            List<ToolCollection[]> allCategories = new List<ToolCollection[]>();
+            allCategories.Add(gardeningTools);
+            allCategories.Add(flooringTools);
+            allCategories.Add(fencingTools);
+            allCategories.Add(measuringTools);
+            allCategories.Add(cleaningTools);
+            allCategories.Add(paintingTools);
+            allCategories.Add(electronicTools);
+            allCategories.Add(electricityTools);
+            allCategories.Add(automotiveTools);
+            Tool aTool = new Tool(Tool, 0);
+            for(int i = 0; i < allCategories.Count(); i++)
+            {
+                for(int j = 0; j < allCategories[i].Length; j++)
+                {
+                    Tool[] arrayToolType = allCategories[i][j].toArray();
+                    for (int k = 0; k < arrayToolType.Length; k++) {
+                        if(arrayToolType[k] != null)
+                        {
+                            if (arrayToolType[k].CompareTo(aTool) == 0)
+                            {
+                                return arrayToolType[k];
+                            }
+                        }
+                    }
+                }
+            }
+            return null;
+        }
         private Member selectMemeber(Member aMember)
         {
             Member[] arrayOfMember = membersOfLibrary.toArray();
@@ -187,6 +371,30 @@ namespace Assignment
             }
             return null;
         }
+
+        private void displayTools(int number, Tool[] toolsFromSelected)
+        {
+            if (number > 0)
+            {
+                Console.WriteLine("\t{0, -25} {1, -10} {2, -10}", "Tool Name", "Available", "Total");
+                Console.WriteLine("============================================================");
+                for (int i = 0; i < toolsFromSelected.Length; i++)
+                {
+                    if (toolsFromSelected[i] != null)
+                    {
+                        Tool element = toolsFromSelected[i];
+                        Console.WriteLine("\t{0}. {1, -25} {2, -10} {3, -10}",i+1, element.Name, element.AvailableQuantity, element.Quantity);
+                    }
+                }
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("No Tools in this Tool Type");
+                Console.ResetColor();
+            }
+        }
+
         private void initialiseToolCollections()
         {
             for (int i = 0; i < 5; i++)
@@ -208,7 +416,7 @@ namespace Assignment
             automotiveTools[5] = new ToolCollection();
         }
 
-        private void selectFromOptions(ref int cat, ref int type)
+        private void selectFromOptions(ref int cat, ref int type, ref bool returnFlag)
         {
             //display categories
             for (int i = 0; i < categories.Length; i++)
@@ -250,7 +458,7 @@ namespace Assignment
                         & !selectedToolType.Equals("4") & !selectedToolType.Equals("5") & !selectedToolType.Equals("6"))
                     {
                         Console.WriteLine("Please enter a valid menu option");
-                        selectedCategory = Console.ReadLine();
+                        selectedToolType = Console.ReadLine();
                     }
                 }
                 else
@@ -259,13 +467,16 @@ namespace Assignment
                         & !selectedToolType.Equals("4") & !selectedToolType.Equals("5"))
                     {
                         Console.WriteLine("Please enter a valid menu option");
-                        selectedCategory = Console.ReadLine();
+                        selectedToolType = Console.ReadLine();
                     }
                 }
                 int intSelectedToolType = Int32.Parse(selectedToolType);
                 intSelectedToolType--;
                 cat = intSelectedCategory;
                 type = intSelectedToolType;
+            } else
+            {
+                returnFlag = true;
             }
         }
 
@@ -294,6 +505,62 @@ namespace Assignment
                 default:
                     return gardeningTools;
             }
+        }
+
+        private void testTools()
+        {
+            gardeningTools[0].add(new Tool("Straight Cutter 52", 5));
+            gardeningTools[0].add(new Tool("Straight Cutter 53", 2));
+            gardeningTools[0].add(new Tool("Straight Cutter 54", 3));
+
+            gardeningTools[1].add(new Tool("Green Machine", 5));
+            gardeningTools[1].add(new Tool("Stew", 5));
+            gardeningTools[1].add(new Tool("Grass Muncher", 5));
+            gardeningTools[1].add(new Tool("Qmungus", 5));
+
+            gardeningTools[2].add(new Tool("Cutters", 5));
+            gardeningTools[2].add(new Tool("Picker", 5));
+            gardeningTools[2].add(new Tool("Stick Lifta", 5));
+            gardeningTools[2].add(new Tool("Lawn Cleaner", 5));
+
+            gardeningTools[3].add(new Tool("Wheelbarrow of Power", 5));
+            gardeningTools[3].add(new Tool("Wheelbarrow of Speed", 5));
+            gardeningTools[3].add(new Tool("Wheelbarrow of Knowledge", 5));
+            gardeningTools[3].add(new Tool("Wheelbarrow of Agility", 5));
+
+            gardeningTools[4].add(new Tool("Power Leaf", 5));
+            gardeningTools[4].add(new Tool("Power Power", 5));
+            gardeningTools[4].add(new Tool("Power Cutter", 5));
+            gardeningTools[4].add(new Tool("Power Hole", 5));
+
+            flooringTools[0].add(new Tool("King Scraper", 5));
+            flooringTools[0].add(new Tool("Queen Scraper", 2));
+            flooringTools[0].add(new Tool("Prince Scraper", 3));
+
+            flooringTools[1].add(new Tool("Looping Laser", 5));
+            flooringTools[1].add(new Tool("Lazy Laser", 5));
+            flooringTools[1].add(new Tool("Lucky Laser", 5));
+            flooringTools[1].add(new Tool("Looper Laser", 5));
+
+            flooringTools[2].add(new Tool("Level", 5));
+            flooringTools[2].add(new Tool("Leveler", 5));
+            flooringTools[2].add(new Tool("ReLeveler", 5));
+            flooringTools[2].add(new Tool("LeadReLeaver", 5));
+
+            flooringTools[3].add(new Tool("Level Powder", 5));
+            flooringTools[3].add(new Tool("Leveler Powder", 5));
+            flooringTools[3].add(new Tool("ReLeveler Powder", 5));
+            flooringTools[3].add(new Tool("LeadReLeaver Powder", 5));
+
+            flooringTools[4].add(new Tool("Hand Floor", 5));
+            flooringTools[4].add(new Tool("Hand Tool for Floor", 5));
+            flooringTools[4].add(new Tool("Tool for Hand Flooring", 5));
+            flooringTools[4].add(new Tool("Flooring for Hand Tools", 5));
+
+            flooringTools[5].add(new Tool("Best Tiling Tool", 5));
+            flooringTools[5].add(new Tool("Number One Tiling Tool", 5));
+            flooringTools[5].add(new Tool("Unbeatable Tiling Tool", 5));
+            flooringTools[5].add(new Tool("King Tiling Tool", 5));
         }
 
     }
@@ -358,180 +625,4 @@ namespace Assignment
     */
 
 
-
-
-
-    /* UI IF I NEED TO DO HERE
-        private void initialiseMenus()
-        {
-            string userSelection = "";
-            string userFeedback = "";
-            bool menuLoop = false;
-
-            do
-            {
-                Console.Clear();
-                menuLoop = false;
-                userSelection = printMainMenu(ref userFeedback);
-
-
-                if (userSelection.Equals("1"))
-                {
-
-                    Console.Clear();
-                    userSelection = "";
-                    displayStaffLogin(ref menuLoop, ref userFeedback);
-                }
-                else if (userSelection.Equals("2"))
-                {
-
-                    Console.Clear();
-                    userSelection = "";
-                    displayMemberLogin(ref menuLoop, ref userFeedback);
-
-                }
-            } while (menuLoop == true);
-
-
-
-        }
-
-        private void displayMemberLogin(ref bool menuLoop, ref string userFeedback)
-        {
-            Console.Clear();
-            Console.WriteLine("Tool Library System - Member Login Page");
-            Console.WriteLine("======================================");
-            Console.WriteLine();
-            Console.WriteLine();
-
-            Console.Write("Enter your member login ID: ");
-            string username = Console.ReadLine();
-            Console.Write("Enter your 4 digit PIN: ");
-            string password = Console.ReadLine();
-            Member[] members = membersOfLibrary.toArray();
-            foreach (Member element in members)
-            {
-                string usernameCheck = element.LastName + element.FirstName;
-
-                if (username.Equals(usernameCheck) & password.Equals(element.PIN))
-                {
-                    Console.Clear();
-                    displayMemberMenu(ref menuLoop);
-                }
-                else
-                {
-                    userFeedback = "Incorrect Member Login";
-                    menuLoop = true;
-                }
-            }
-        }
-
-        private void displayMemberMenu(ref bool menuLoop)
-        {
-
-            Console.WriteLine("Welcome to the Tool Library");
-            Console.WriteLine();
-            Console.WriteLine("========Member Menu========");
-            Console.WriteLine("1. Display tools by category");
-            Console.WriteLine("2. Borrow tool from library");
-            Console.WriteLine("3. Return tool to library");
-            Console.WriteLine("4. List tools on loan");
-            Console.WriteLine("5. Display most frequently borrowed tools");
-            Console.WriteLine("0. Return to main menu");
-            Console.WriteLine("=========================");
-            Console.WriteLine();
-            Console.Write("Please make a selection(1 - 5, or 0 to exit): ");
-            string k = Console.ReadLine();
-            while (!k.Equals("0") & !k.Equals("1") & !k.Equals("2")
-                & !k.Equals("3") & !k.Equals("4") & !k.Equals("5") & !k.Equals("6"))
-            {
-                Console.WriteLine("Please enter a valid menu option");
-                k = Console.ReadLine();
-            }
-            if (k.Equals("0"))
-            {
-                menuLoop = true;
-            }
-        }
-        private void displayStaffLogin(ref bool menuLoop, ref string userFeedback)
-        {
-
-            Console.Clear();
-            Console.WriteLine("Tool Library System - Staff Login Page");
-            Console.WriteLine("======================================");
-            Console.WriteLine();
-            Console.WriteLine();
-
-            Console.Write("Enter staff login: ");
-            string username = Console.ReadLine();
-            Console.Write("Enter staff password: ");
-            string password = Console.ReadLine();
-            if (username.Equals("staff") & password.Equals("today123"))
-            {
-                Console.Clear();
-                displayStaffMenu(ref menuLoop);
-            }
-            else
-            {
-                userFeedback = "Incorrect Staff Login";
-                menuLoop = true;
-            }
-        }
-        private void displayStaffMenu(ref bool menuLoop)
-        {
-
-            Console.WriteLine("Welcome to the Tool Library");
-            Console.WriteLine();
-            Console.WriteLine("========Staff Menu========");
-            Console.WriteLine("1. Add a new tool");
-            Console.WriteLine("2. Add new pieces of an existing tool");
-            Console.WriteLine("3. Remove some pieces of a tool");
-            Console.WriteLine("4. Register a new member");
-            Console.WriteLine("5. Remove a member");
-            Console.WriteLine("6. Show tools member has on loan");
-            Console.WriteLine("0. Return to main menu");
-            Console.WriteLine("=========================");
-            Console.WriteLine();
-            Console.Write("Please make a selection(1 - 6, or 0 to exit): ");
-            string k = Console.ReadLine();
-            while (!k.Equals("0") & !k.Equals("1") & !k.Equals("2")
-                & !k.Equals("3") & !k.Equals("4") & !k.Equals("5") & !k.Equals("6"))
-            {
-                Console.WriteLine("Please enter a valid menu option");
-                k = Console.ReadLine();
-            }
-            if (k.Equals("0"))
-            {
-                menuLoop = true;
-            }
-        }
-        private string printMainMenu(ref string userFeedback)
-        {
-            Console.WriteLine("Welcome to the Tool Library");
-            Console.WriteLine();
-            Console.WriteLine("========Main Menu========");
-            Console.WriteLine("1. Staff Login");
-            Console.WriteLine("2. Member Login");
-            Console.WriteLine("0. Exit");
-            Console.WriteLine("=========================");
-            Console.WriteLine();
-            if(userFeedback.Length > 0)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(userFeedback);
-                Console.ResetColor();
-                userFeedback = "";
-
-
-            }
-            Console.Write("Please make a selection(1 - 2, or 0 to exit): ");
-            string k = Console.ReadLine();
-            while (!k.Equals("0") & !k.Equals("1") & !k.Equals("2"))
-            {
-                Console.WriteLine("Please enter a valid menu option");
-                k = Console.ReadLine();
-            }
-            return k;
-        }
-        */
 }

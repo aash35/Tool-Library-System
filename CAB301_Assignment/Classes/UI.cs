@@ -14,6 +14,7 @@ namespace Assignment
         //might not need these two
         private string[] categories;
         private string[][] toolTypes;
+        private Member loginUser = null;
 
         public UI(ToolLibrarySystem toolLibrarySystem, string[] categoryStrings, string[][] toolTypeStrings )
         {
@@ -24,12 +25,11 @@ namespace Assignment
             toolTypes = toolTypeStrings;
 
             //need to add to systemLibrary too
-            registerMembers.add(new Member("test","man","12321","4424"));
+            registerMembers.add(new Member("user","user","12321","0000"));
 
             string userSelection = "";
             string userFeedback = "";
             bool menuLoop = false;
-
             do
             {
                 Console.Clear();
@@ -73,6 +73,7 @@ namespace Assignment
 
                 if (username.Equals(usernameCheck) & password.Equals(element.PIN))
                 {
+                    loginUser = element;
                     displayMemberMenu(ref menuLoop);
                 }
                 else
@@ -113,6 +114,7 @@ namespace Assignment
                 }
                 if (k.Equals("0"))
                 {
+                    loginUser = null;
                     menuLoop = true;
                 }
                 else if (k.Equals("1"))
@@ -124,11 +126,15 @@ namespace Assignment
                 }
                 else if (k.Equals("2"))
                 {
-
+                    Tool aTool = new Tool("empty", 0);
+                    systemLibrary.borrowTool(loginUser, aTool);
+                    memberMenuLoop = true;
                 }
                 else if (k.Equals("3"))
                 {
-
+                    Tool aTool = new Tool("empty", 0);
+                    systemLibrary.returnTool(loginUser, aTool);
+                    memberMenuLoop = true;
                 }
                 else if (k.Equals("4"))
                 {
