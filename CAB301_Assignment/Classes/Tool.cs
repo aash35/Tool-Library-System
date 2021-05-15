@@ -62,9 +62,10 @@ namespace Assignment
 
         public void deleteBorrower(Member aMember)
         {
-            GetBorrowers.delete(aMember);
+            members.delete(aMember);
             AvailableQuantity++;
         }
+
         public override string ToString()
         {
             string returnStatement = String.Format("Name: {0}\nAvailable Quantity: {1}", Name, AvailableQuantity);

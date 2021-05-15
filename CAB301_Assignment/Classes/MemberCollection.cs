@@ -12,6 +12,7 @@ namespace Assignment
     public class MemberCollection : iMemberCollection
     {
         private MemberNode root;
+        private Member[] memberArray = new Member[0];
         private int number;
         public int Number
         {
@@ -23,6 +24,7 @@ namespace Assignment
             root = null;
             Number = 0;
         }
+
 
         public void add(Member aMember)
         {
@@ -113,11 +115,19 @@ namespace Assignment
             return searchTree(aMember, root);
         }
 
+        /// <summary>
+        /// Doesnt do the calculation uselss it has too
+        /// </summary>
+        /// <returns></returns>
         public Member[] toArray()
         {
-            int i = 0;
-            Member[] memberArray = new Member[Number];
-            InOrderTraverse(root, ref memberArray, ref i);
+            if(memberArray.Length != Number)
+            {
+                int i = 0;
+                Member[] newmemberArray = new Member[Number];
+                InOrderTraverse(root, ref newmemberArray, ref i);
+                memberArray = newmemberArray;
+            }
             return memberArray;
         }
         private void InOrderTraverse(MemberNode root, ref Member[] memberArray, ref int i)

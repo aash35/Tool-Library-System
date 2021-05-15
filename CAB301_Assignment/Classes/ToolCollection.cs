@@ -49,10 +49,14 @@ namespace Assignment
                     if (toolArray[i].Name.Equals(aTool.Name))
                     {
                         toolArray[i] = null;
+                        toolArraySort();
+                        Number--;
                     }
                 }
             }
         }
+
+        
 
         public bool search(Tool aTool)
         {
@@ -82,6 +86,23 @@ namespace Assignment
                 tempArray[i] = toolArray[i];
             }
             toolArray = tempArray;
+        }
+
+        private void toolArraySort()
+        {
+            int counter = 0;
+            for(int i = 0; i < toolArray.Length; i++)
+            {
+                if(toolArray[i] != null)
+                {
+                    toolArray[counter] = toolArray[i];
+                    counter++;
+                }
+            }
+            for(int i = counter; i < toolArray.Length; i++)
+            {
+                toolArray[i] = null;
+            }
         }
     }
 }

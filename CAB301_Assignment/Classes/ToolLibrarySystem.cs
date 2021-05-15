@@ -39,33 +39,162 @@ namespace Assignment
             testTools();
         }
 
-        
+        /////////////////////////////////////////////////////start of finished
 
-        //important to make it so if the method is called by itself it works
-        //split into two sections
-        //Part 1: the ui and creating the object
-        //Part 2: Placing the object
+        /// <summary>
+        /// Select a category and tool type to added a new tool too
+        /// if the tool already exists, then it wont add
+        /// </summary>
+        /// <param name="aTool">a new tool object with name set to user input
+        /// quantity is set by default to 1</param>
         public void add(Tool aTool)
         {
-            throw new NotImplementedException();
-        } 
-
-        public void add(Tool aTool, int quantity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void add(Member aMember)
-        {
-            if (membersOfLibrary.search(aMember) != true)
+            int cat = 0;
+            int type = 0;
+            bool returnFlag = false;
+            Console.Clear();
+            Console.WriteLine("Library System - Select a category");
+            Console.WriteLine("===========================================");
+            Console.WriteLine();
+            selectFromOptions(ref cat, ref type,ref returnFlag);
+            Console.Clear();
+            if (returnFlag == false)
             {
-                membersOfLibrary.add(aMember);
+                ToolCollection[] finalSelectedCategory = selectRightCategory(cat);
+                Tool[] toolsFromSelected = finalSelectedCategory[type].toArray();
+                bool existingTool = false;
+                for(int i = 0; i < toolsFromSelected.Length; i++)
+                {
+                    if (toolsFromSelected[i] != null)
+                    {
+                        if (toolsFromSelected[i].CompareTo(aTool) == 0)
+                        {
+                            existingTool = true;
+                            i = toolsFromSelected.Length;
+                        }
+                    }
+                }
+                if (!existingTool)
+                {
+                    finalSelectedCategory[type].add(aTool);
+                    Console.WriteLine();
+                    Console.WriteLine("Tool successfully added");
+                    Console.WriteLine();
+
+                }
+                else
+                {
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Tool already exists in Tool Type");
+                    Console.ResetColor();
+                    Console.WriteLine();
+                }
             }
             else
             {
-                Console.WriteLine("This memeber is already added");
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Add Tool cancelled");
+                Console.ResetColor();
+                Console.WriteLine();
             }
+            Console.Write("Hit any key to return to menu");
+            Console.ReadKey();
         }
+
+        /// <summary>
+        /// Creates a menu from which the user can select the tool and but much they would
+        /// like to update the stock by
+        /// </summary>
+        /// <param name="aTool">empty and not used for the purpose of the program except to
+        /// for matching to a tool already in the library</param>
+        /// <param name="quantity">initally empty, the quantity is updated to the amount
+        /// that the selected tools quality and AvailableQuantity qantity need to be updated by</param>
+        public void add(Tool aTool, int quantity)
+        {
+            int cat = 0;
+            int type = 0;
+            bool returnFlag = false;
+            Console.Clear();
+            Console.WriteLine("Library System - Update Existing Tool Stock Level");
+            Console.WriteLine("===========================================");
+            Console.WriteLine();
+            selectFromOptions(ref cat, ref type,ref returnFlag);
+            Console.Clear();
+            if (returnFlag == false)
+            {
+                ToolCollection[] finalSelectedCategory = selectRightCategory(cat);
+                int number = finalSelectedCategory[type].Number;
+                Tool[] toolsFromSelected = finalSelectedCategory[type].toArray();
+
+
+                Console.Clear();
+                Console.WriteLine("List of Tools");
+                Console.WriteLine("============================================================");
+                displayTools(number, toolsFromSelected);
+                Console.WriteLine("============================================================");
+                Console.WriteLine();
+
+                if (number != 0)
+                {
+                    Console.Write("Please make a selection(1 - {0}, or 0 to exit): ", number);
+                    string k = Console.ReadLine();
+                    int selection;
+                    bool success = Int32.TryParse(k, out selection);
+
+                    while (success == false | selection > number | selection < 0)
+                    {
+                        Console.WriteLine("Please enter a valid menu option");
+                        k = Console.ReadLine();
+                        success = Int32.TryParse(k, out selection);
+                    }
+
+                    if (selection != 0)
+                    {
+                        selection--;
+                        Console.Write("Enter the quantity of stock added to library: ", number);
+                        string j = Console.ReadLine();
+                        bool quantitySuccess = Int32.TryParse(j, out quantity);
+
+                        while (quantitySuccess == false | quantity <= 0 | quantity >= 100)
+                        {
+                            Console.WriteLine("Please enter a number (must be a number greater than 0 but less than 100)");
+                            j = Console.ReadLine();
+                            quantitySuccess = Int32.TryParse(j, out quantity);
+                        }
+
+                        Tool selectedTool = toolsFromSelected[selection];
+                        selectedTool.Quantity += quantity;
+                        selectedTool.AvailableQuantity += quantity;
+                        Console.WriteLine();
+                        Console.WriteLine("Tool Stock Updated");
+                        Console.WriteLine();
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Add Tool cancelled");
+                Console.ResetColor();
+                Console.WriteLine();
+            }
+            Console.Write("Hit any key to return to menu");
+            Console.ReadKey();
+        }
+
+        /// <summary>
+        /// Add a member to the system, verification logic done in UI to keep synchronicity
+        /// between the 'registerMembers' (used for login) and 'membersOfLibrary' (storing user data)
+        /// </summary>
+        /// <param name="aMember">a complete member object that is added to 'membersOfLibrary'</param>
+        public void add(Member aMember)
+        {
+            membersOfLibrary.add(aMember);
+        }
+
 
         /// <summary>
         /// Allows members to select a tool to borrow from the library. Selected through Category
@@ -164,41 +293,267 @@ namespace Assignment
             }
         }
 
-
+        /// <summary>
+        /// Method not used as the option from the UI "Remove some pieces of a tool" uses the
+        /// overloaded version 'delete(Tool aTool, int quantity)' instead, however it is still
+        /// coded to work if needed
+        /// </summary>
+        /// <param name="aTool">Initially en empty tool that is populated in the menu system
+        /// which is then used to select and delete the right item from the selected tool collection</param>
         public void delete(Tool aTool)
         {
-            throw new NotImplementedException();
-        }
-
-        public void delete(Tool aTool, int quantity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void delete(Member aMember)
-        {
-            if(membersOfLibrary.search(aMember) == true)
+            int cat = 0;
+            int type = 0;
+            bool returnFlag = false;
+            Console.Clear();
+            Console.WriteLine("Library System - Delete Tools from library ");
+            Console.WriteLine("===========================================");
+            Console.WriteLine();
+            selectFromOptions(ref cat, ref type, ref returnFlag);
+            Console.Clear();
+            if (returnFlag == false)
             {
-                membersOfLibrary.delete(aMember);
+                ToolCollection[] finalSelectedCategory = selectRightCategory(cat);
+                int number = finalSelectedCategory[type].Number;
+                Tool[] toolsFromSelected = finalSelectedCategory[type].toArray();
+
+
+                Console.Clear();
+                Console.WriteLine("List of Tools");
+                Console.WriteLine("============================================================");
+                displayTools(number, toolsFromSelected);
+                Console.WriteLine("============================================================");
+                Console.WriteLine();
+
+                if (number != 0)
+                {
+                    Console.Write("Please make a selection(1 - {0}, or 0 to exit): ", number);
+                    string k = Console.ReadLine();
+                    int selection;
+                    bool success = Int32.TryParse(k, out selection);
+
+                    while (success == false | selection > number | selection < 0)
+                    {
+                        Console.WriteLine("Please enter a valid menu option");
+                        k = Console.ReadLine();
+                        success = Int32.TryParse(k, out selection);
+                    }
+
+                    if (selection != 0)
+                    {
+                        selection--;
+                        Tool selectedTool = toolsFromSelected[selection];
+
+                        if (selectedTool.GetBorrowers.Number == 0)
+                        {
+                            finalSelectedCategory[type].delete(selectedTool);
+                            Console.WriteLine();
+                            Console.WriteLine("Tool Deleted");
+                            Console.WriteLine();
+                        }
+                        else
+                        {
+                            Member[] currentBorrowers = selectedTool.GetBorrowers.toArray();
+
+                            Console.WriteLine();
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Cannot delete while member's is borrowing");
+                            for (int i = 0; i < currentBorrowers.Length; i++)
+                            {
+                                Console.WriteLine();
+                                Console.WriteLine(" - " + currentBorrowers[i]);
+                            }
+                            Console.ResetColor();
+                            Console.WriteLine();
+                        }
+                    }
+                }
             }
             else
             {
-                Console.WriteLine("Memeber does not exist");
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Delete Tools cancelled");
+                Console.ResetColor();
+                Console.WriteLine();
             }
+            Console.Write("Hit any key to return to menu");
+            Console.ReadKey();
         }
 
-
-        public void displayBorrowingTools(Member aMember)
+        /// <summary>
+        /// method used to delete tools or a quantity of tools from the library
+        /// this method displays a menu from which the user selected the tool they would
+        /// like to delete or decrease the stock of
+        /// </summary>
+        /// <param name="aTool">initally empty tool that becomes populated with the selected tool</param>
+        /// <param name="quantity">the number in which the stock of the selected tool is to be decreased.
+        /// Initally 0 however the user selects the number to be reduced by inside the menu system</param>
+        public void delete(Tool aTool, int quantity)
         {
-            aMember = selectMemeber(aMember);
-            string[] borrowedTools = aMember.Tools;
-            foreach(string element in borrowedTools)
+            int cat = 0;
+            int type = 0;
+            bool returnFlag = false;
+            Console.Clear();
+            Console.WriteLine("Library System - Delete Tools from library ");
+            Console.WriteLine("===========================================");
+            Console.WriteLine();
+            selectFromOptions(ref cat, ref type, ref returnFlag);
+            Console.Clear();
+            if (returnFlag == false)
             {
-                if (!string.IsNullOrEmpty(element))
+                ToolCollection[] finalSelectedCategory = selectRightCategory(cat);
+                int number = finalSelectedCategory[type].Number;
+                Tool[] toolsFromSelected = finalSelectedCategory[type].toArray();
+
+
+                Console.Clear();
+                Console.WriteLine("List of Tools");
+                Console.WriteLine("============================================================");
+                displayTools(number, toolsFromSelected);
+                Console.WriteLine("============================================================");
+                Console.WriteLine();
+
+                if (number != 0)
                 {
-                    Console.WriteLine(element);
+                    Console.Write("Please make a selection(1 - {0}, or 0 to exit): ", number);
+                    string k = Console.ReadLine();
+                    int selection;
+                    bool success = Int32.TryParse(k, out selection);
+
+                    while (success == false | selection > number | selection < 0)
+                    {
+                        Console.WriteLine("Please enter a valid menu option");
+                        k = Console.ReadLine();
+                        success = Int32.TryParse(k, out selection);
+                    }
+
+                    if (selection != 0)
+                    {
+                        selection--;
+                        Tool selectedTool = toolsFromSelected[selection];
+                        Console.Write("Enter the quantity of stock to be removed from library: ");
+                        string j = Console.ReadLine();
+                        bool quantitySuccess = Int32.TryParse(j, out quantity);
+
+                        while (quantitySuccess == false | quantity > selectedTool.AvailableQuantity | quantity < 0)
+                        {
+                            if (quantitySuccess == false)
+                            {
+                                Console.WriteLine("Please enter a number");
+                            }
+                            else if (quantity > selectedTool.AvailableQuantity & quantity <= selectedTool.Quantity)
+                            {
+                                Member[] currentBorrowers = selectedTool.GetBorrowers.toArray();
+
+                                Console.WriteLine();
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("Cannot delete while members are borrowing");
+                                for (int i = 0; i < currentBorrowers.Length; i++)
+                                {
+                                    Console.WriteLine();
+                                    Console.WriteLine(" - " + currentBorrowers[i]);
+                                }
+                                Console.ResetColor();
+                                Console.WriteLine();
+                                Console.WriteLine("Please enter a valued number (between 0 and {0} (the available quantity))", selectedTool.AvailableQuantity);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Please enter a valued number (between 0 and {0} (the available quantity))", selectedTool.AvailableQuantity);
+                            }
+                            j = Console.ReadLine();
+                            quantitySuccess = Int32.TryParse(j, out quantity);
+                        }
+                        if (quantity == selectedTool.Quantity)
+                        {
+                            //finish this
+                            finalSelectedCategory[type].delete(selectedTool);
+                            Console.WriteLine();
+                            Console.WriteLine("Tool Deleted");
+                            Console.WriteLine();
+                        } 
+                        else
+                        {
+                            //finish this
+                            selectedTool.Quantity -= quantity;
+                            selectedTool.AvailableQuantity -= quantity;
+                            Console.WriteLine();
+                            Console.WriteLine("Tool Stock reduced by {0}", quantity);
+                            Console.WriteLine();
+                        }
+                    }
                 }
             }
+            else
+            {
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Delete Tools cancelled");
+                Console.ResetColor();
+                Console.WriteLine();
+            }
+            Console.Write("Hit any key to return to menu");
+            Console.ReadKey();
+        }
+
+        /// <summary>
+        /// The UI object passes a member object that have no tools borrowed and 
+        /// remove the member from the toollibrary
+        /// </summary>
+        /// <param name="aMember">the member object is passed in after it have been
+        /// verified to have no borrowed tools. the memeber is then deleted from the
+        /// 'membersOfLibrary' memberCollection</param>
+        public void delete(Member aMember)
+        {
+            membersOfLibrary.delete(aMember);
+        }
+
+        /// <summary>
+        /// currently used by the staff menu to display all the tools a select
+        /// member has on loan. Staff have to select a member from a menu system.
+        /// it then displays all the members borrowed tools
+        /// </summary>
+        /// <param name="aMember">Initally empty user which becomes a selected member when the staff
+        /// selects a user for the menu</param>
+        public void displayBorrowingTools(Member aMember)
+        {
+            if (membersOfLibrary.search(aMember))
+            {
+                Member theMember = selectMemeber(aMember);
+                string[] borrowedTools = theMember.Tools;
+                List<string> noNullTools = new List<string>();
+                for (int i = 0; i < borrowedTools.Length; i++)
+                {
+                    if (borrowedTools[i] != null)
+                    {
+                        noNullTools.Add(borrowedTools[i]);
+                    }
+                }
+                Console.Clear();
+                Console.WriteLine("Library System - Display Borrowed Tools");
+                Console.WriteLine("===========================================");
+                if (noNullTools.Count > 0) {
+                    foreach (string element in noNullTools)
+                    {
+                        if (!string.IsNullOrEmpty(element))
+                        {
+                            Console.WriteLine("\t"+element);
+                        }
+                    }
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Currently no tools borrowed");
+                    Console.ResetColor();
+                }
+                
+                Console.WriteLine("===========================================");
+                Console.WriteLine();
+            }
+            Console.Write("Hit any key to return to menu");
+            Console.ReadKey();
         }
 
         /// <summary>
@@ -232,19 +587,53 @@ namespace Assignment
                 Console.ReadKey();
             }
         }
-
-
+        /////////////////////////////////////////////////////end of finished
+        
+        //****************\\
         public void displayTopTHree()
         {
-            throw new NotImplementedException();
+            Console.Clear();
+            Console.WriteLine("Most Frequently Borrowed Tools");
+            Console.WriteLine("===========================================");
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("Coming Soon");
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("===========================================");
+            Console.Write("Hit any key to return to menu");
+            Console.ReadKey();
         }
 
+
+
+        /////////////////////////////////////////////////////start of finished
+        /// <summary>
+        /// returns a string array of all the tools a logged in user is currently holding.
+        /// This method is used in the member menu to display member tools and displayBorrowingTools is used in the staff menu
+        /// </summary>
+        /// <param name="aMember">The UI passes the currently logged in member which is used 
+        /// to match to a member in the tool library system</param>
+        /// <returns>an array of all the names of tools a member is borrowing</returns>
         public string[] listTools(Member aMember)
         {
+            string[] borrowedTools = new string[0];
 
-            throw new NotImplementedException();
+            if (membersOfLibrary.search(aMember))
+            {
+                Member theMemeber = selectMemeber(aMember);
+                borrowedTools = theMemeber.Tools;
+            }
+            return borrowedTools;
         }
 
+        /// <summary>
+        /// Allows members to return one of the tool that they are currently holding. This increase the availabl equantity of the tool
+        /// </summary>
+        /// <param name="aMember">The UI passes the currently logged in member which is used 
+        /// to match to a member in the tool library system</param>
+        /// <param name="aTool">The Tool is initally empty but then updated when the member selects a tool
+        /// from the Category and Tool Type menu system</param>
         public void returnTool(Member aMember, Tool aTool)
         {
             if (membersOfLibrary.search(aMember))
@@ -252,7 +641,7 @@ namespace Assignment
                 Member theMemeber = selectMemeber(aMember);
                 string[] borrowedTools = theMemeber.Tools;
                 Console.Clear();
-                Console.WriteLine("Library System - Display Borrowed Tools");
+                Console.WriteLine("Library System - Display Borrowed Tools to return");
                 Console.WriteLine("===========================================");
 
                 List<string> noNullTools = new List<string>();
@@ -323,7 +712,7 @@ namespace Assignment
                 //delete the memeber from tool borrowlist (need to find the tool first, different from the above aTool)
             }
         }
-
+        /////////////////////////////////////////////////////end of finished
 
 
 
@@ -564,65 +953,5 @@ namespace Assignment
         }
 
     }
-
-    /* ADD TOOLS LOGIC
-    public void delete(Tool aTool)
-    {
-        for (int i = 0; i < toolArray.Length; i++)
-        {
-            if (toolArray[i] != null)
-            {
-                if (toolArray[i].Name.Equals(aTool.Name))
-                {
-                    if (toolArray[i].AvailableQuantity >= aTool.Quantity)
-                    {
-                        toolArray[i].Quantity -= aTool.Quantity;
-                        toolArray[i].AvailableQuantity -= aTool.Quantity;
-                    }
-                    else
-                    {
-                        //this will be ToolCollectionName.delete(tool)
-                        toolArray[i] = null;
-                    }
-                }
-            }
-        }
-    }
-
-    public void add(Tool aTool)
-    {
-        if (search(aTool) == true)
-        {
-            for (int i = 0; i < toolArray.Length; i++)
-            {
-                if (toolArray[i] != null)
-                {
-                    if (toolArray[i].Name.Equals(aTool.Name))
-                    {
-                        toolArray[i].Quantity += aTool.Quantity;
-                        toolArray[i].AvailableQuantity += aTool.Quantity;
-                    }
-                }
-            }
-        }
-        else
-        {
-            if (Number >= toolArray.Length)
-            {
-                dynamicArray();
-            }
-            for (int i = 0; i < toolArray.Length; i++)
-            {
-                if (toolArray[i] == null)
-                {
-                    //this will be ToolCollectionName.add(tool)
-                    toolArray[i] = aTool;
-                }
-            }
-            Number++;
-        }
-    }
-    */
-
 
 }
