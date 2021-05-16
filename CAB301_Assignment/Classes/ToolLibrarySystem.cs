@@ -22,6 +22,8 @@ namespace Assignment
         private ToolCollection[] electricityTools = new ToolCollection[5];
         private ToolCollection[] automotiveTools = new ToolCollection[6];
 
+        private ToolCollection borrowedTools = new ToolCollection();
+
 
         private MemberCollection membersOfLibrary = new MemberCollection();
 
@@ -34,9 +36,8 @@ namespace Assignment
             categories = libraryCategories;
             toolTypes = libraryToolTypes;
 
-            //Testing Purposes
-            membersOfLibrary.add(new Member("user", "user", "12321", "0000"));
             testTools();
+            testTopThree();
         }
 
         /////////////////////////////////////////////////////start of finished
@@ -265,10 +266,13 @@ namespace Assignment
                                     {
                                         theMemeber.addTool(selectedTool);
                                         selectedTool.addBorrower(theMemeber);
+                                        if(borrowedTools.search(selectedTool) == false)
+                                        {
+                                            borrowedTools.add(selectedTool);
+                                        }
                                         Console.WriteLine();
                                         Console.WriteLine("Borrowed {0} from the library", selectedTool.Name);
                                         Console.WriteLine();
-
                                     }
                                     else
                                     {
@@ -587,9 +591,6 @@ namespace Assignment
                 Console.ReadKey();
             }
         }
-        /////////////////////////////////////////////////////end of finished
-        
-        //****************\\
         public void displayTopTHree()
         {
             Console.Clear();
@@ -597,7 +598,22 @@ namespace Assignment
             Console.WriteLine("===========================================");
             Console.WriteLine();
             Console.WriteLine();
-            Console.WriteLine("Coming Soon");
+            Tool[] listOfBorrowedTools = borrowedTools.toArray();
+            List<Tool> noNullTools = new List<Tool>();
+            for (int i = 0; i < listOfBorrowedTools.Length; i++)
+            {
+                if (listOfBorrowedTools[i] != null)
+                {
+                    noNullTools.Add(listOfBorrowedTools[i]);
+                }
+            }
+            listOfBorrowedTools = noNullTools.ToArray();
+            Tool[] topThree = heapSort(listOfBorrowedTools);
+            for(int i = 0; i < topThree.Length; i++)
+            {
+                Console.WriteLine("{0}. {1} --- Borrowed {2} {3}", i+1, topThree[i].Name, topThree[i].NoBorrowings, topThree[i].NoBorrowings > 1 ? "times" : "time");
+            }
+
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("===========================================");
@@ -605,9 +621,6 @@ namespace Assignment
             Console.ReadKey();
         }
 
-
-
-        /////////////////////////////////////////////////////start of finished
         /// <summary>
         /// returns a string array of all the tools a logged in user is currently holding.
         /// This method is used in the member menu to display member tools and displayBorrowingTools is used in the staff menu
@@ -896,6 +909,141 @@ namespace Assignment
             }
         }
 
+        private Tool[] heapSort(Tool[] listOfBorrowedTools)
+        {
+            Tool[] topThree = new Tool[3];
+            HeapBottomUp(listOfBorrowedTools);
+
+            int counter = 0;
+            for (int i = 0; i <= listOfBorrowedTools.Length - 1; i++)
+            {
+                MaxKeyDelete(listOfBorrowedTools, listOfBorrowedTools.Length - i, counter, topThree);
+                counter++;
+                if (counter == 3)
+                {
+                    i = listOfBorrowedTools.Length - 1;
+                }
+            }
+            return topThree;
+        }
+        private void HeapBottomUp(Tool[] data)  //Note: In the algorithm, the array index starts from 1
+        {
+            int n = data.Length;
+            for (int i = (n - 1) / 2; i >= 0; i--)
+            {
+                int k = i;
+                Tool v = data[i];
+                bool heap = false;
+                while ((!heap) && ((2 * k + 1) <= (n - 1)))
+                {
+                    int j = 2 * k + 1;  //the left child of k
+                    if (j < (n - 1))   //k has two children
+                        if (data[j].NoBorrowings < data[j + 1].NoBorrowings)
+                            j = j + 1;  //j is the larger child of k
+                    if (v.NoBorrowings >= data[j].NoBorrowings)
+                        heap = true;
+                    else
+                    {
+                        data[k] = data[j];
+                        k = j;
+                    }
+                }
+                data[k] = v;
+            }
+        }
+        //delete the maximum key and rebuild the heap
+        private void MaxKeyDelete(Tool[] data, int size, int counter, Tool[] topThree)
+        {
+            topThree[counter] = data[0];
+            //Exchange the root’s key with the last key K of the heap;
+            Tool temp = data[0];
+            data[0] = data[size - 1];
+            data[size - 1] = temp;
+
+
+
+            int n = size - 1;
+
+            //“Heapify” the complete binary tree.
+            int k = 0;
+            Tool v = data[0];
+            bool heap = false;
+            while ((!heap) && ((2 * k + 1) <= (n - 1)))
+            {
+                int j = 2 * k + 1;
+                if (j < (n - 1))
+                {
+                    if (data[j].NoBorrowings < data[j + 1].NoBorrowings)
+                    {
+                        j++;
+                    }
+                }
+                if (v.NoBorrowings >= data[j].NoBorrowings)
+                {
+                    heap = true;
+                }
+                else
+                {
+                    data[k] = data[j];
+                    k = j;
+                }
+
+            }
+            data[k] = v;
+        }
+
+        private void testTopThree()
+        {
+            Member memberA = new Member("a", "a", "12321", "0000");
+            Member memberB = new Member("b", "b", "12321", "0000");
+
+            membersOfLibrary.add(memberA);
+            membersOfLibrary.add(memberB);
+            Tool[] gardeningToolsArray = gardeningTools[0].toArray();
+
+
+            memberB.addTool(gardeningToolsArray[1]);
+            gardeningToolsArray[1].addBorrower(memberB);
+            if (borrowedTools.search(gardeningToolsArray[1]) == false)
+            {
+                borrowedTools.add(gardeningToolsArray[1]);
+            }
+
+            memberB.addTool(gardeningToolsArray[1]);
+            gardeningToolsArray[1].addBorrower(memberB);
+            if (borrowedTools.search(gardeningToolsArray[1]) == false)
+            {
+                borrowedTools.add(gardeningToolsArray[1]);
+            }
+
+            memberB.addTool(gardeningToolsArray[2]);
+            gardeningToolsArray[2].addBorrower(memberB);
+            if (borrowedTools.search(gardeningToolsArray[2]) == false)
+            {
+                borrowedTools.add(gardeningToolsArray[2]);
+            }
+
+            memberA.addTool(gardeningToolsArray[0]);
+            gardeningToolsArray[0].addBorrower(memberA);
+            if (borrowedTools.search(gardeningToolsArray[0]) == false)
+            {
+                borrowedTools.add(gardeningToolsArray[0]);
+            }
+
+            memberA.addTool(gardeningToolsArray[0]);
+            gardeningToolsArray[0].addBorrower(memberA);
+            if (borrowedTools.search(gardeningToolsArray[0]) == false)
+            {
+                borrowedTools.add(gardeningToolsArray[0]);
+            }
+
+            memberA.addTool(gardeningToolsArray[0]);
+            gardeningToolsArray[0].addBorrower(memberA);
+            if (borrowedTools.search(gardeningToolsArray[0]) == false)
+            {
+                borrowedTools.add(gardeningToolsArray[0]);
+            }
+        }
         private void testTools()
         {
             gardeningTools[0].add(new Tool("Straight Cutter 52", 5));
@@ -951,6 +1099,9 @@ namespace Assignment
             flooringTools[5].add(new Tool("Unbeatable Tiling Tool", 5));
             flooringTools[5].add(new Tool("King Tiling Tool", 5));
         }
+
+
+       
 
     }
 

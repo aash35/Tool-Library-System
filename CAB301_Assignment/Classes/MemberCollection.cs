@@ -14,6 +14,8 @@ namespace Assignment
         private MemberNode root;
         private Member[] memberArray = new Member[0];
         private int number;
+        private int oldCheck = 0;
+        private int newCheck = 1;
         public int Number
         {
             get { return number; }
@@ -39,6 +41,7 @@ namespace Assignment
                     addNew(aMember, root);
                 }
                 Number++;
+                newCheck++;
             }
         }
 
@@ -58,55 +61,52 @@ namespace Assignment
 
             if (currentNode != null) // if the search was successful
             {
-                if(currentNode.Member.Tools.All(item => item == null))
+                // case 3: item has two children
+                if ((currentNode.Lchild != null) && (currentNode.Rchild != null))
                 {
-                    // case 3: item has two children
-                    if ((currentNode.Lchild != null) && (currentNode.Rchild != null))
+                    // find the right-most node in left subtree of currentNode
+                    if (currentNode.Lchild.Rchild == null) // a special case: the right subtree of currentNode.Lchild is empty
                     {
-                        // find the right-most node in left subtree of currentNode
-                        if (currentNode.Lchild.Rchild == null) // a special case: the right subtree of currentNode.Lchild is empty
-                        {
-                            currentNode.Member = currentNode.Lchild.Member;
-                            currentNode.Lchild = currentNode.Lchild.Lchild;
-                        }
-                        else
-                        {
-                            MemberNode p = currentNode.Lchild;
-                            MemberNode pp = currentNode; // parent of p
-                            while (p.Rchild != null)
-                            {
-                                pp = p;
-                                p = p.Rchild;
-                            }
-                            // copy the item at p to currentNode
-                            currentNode.Member = p.Member;
-                            pp.Rchild = p.Lchild;
-                        }
-                        Number--;
+                        currentNode.Member = currentNode.Lchild.Member;
+                        currentNode.Lchild = currentNode.Lchild.Lchild;
                     }
-                    else // cases 1 & 2: item has no or only one child
+                    else
                     {
-                        MemberNode c;
-                        if (currentNode.Lchild != null)
-                            c = currentNode.Lchild;
-                        else
-                            c = currentNode.Rchild;
-
-                        // remove node currentNode
-                        if (currentNode == root) //need to change root
-                            root = c;
-                        else
+                        MemberNode p = currentNode.Lchild;
+                        MemberNode pp = currentNode; // parent of p
+                        while (p.Rchild != null)
                         {
-                            if (currentNode == parent.Lchild)
-                                parent.Lchild = c;
-                            else
-                                parent.Rchild = c;
+                            pp = p;
+                            p = p.Rchild;
                         }
-                        Number--;
+                        // copy the item at p to currentNode
+                        currentNode.Member = p.Member;
+                        pp.Rchild = p.Lchild;
                     }
+                    Number--;
+                    newCheck++;
+                }
+                else // cases 1 & 2: item has no or only one child
+                {
+                    MemberNode c;
+                    if (currentNode.Lchild != null)
+                        c = currentNode.Lchild;
+                    else
+                        c = currentNode.Rchild;
 
-                }             
-
+                    // remove node currentNode
+                    if (currentNode == root) //need to change root
+                        root = c;
+                    else
+                    {
+                        if (currentNode == parent.Lchild)
+                            parent.Lchild = c;
+                        else
+                            parent.Rchild = c;
+                    }
+                    Number--;
+                    newCheck++;
+                }  
             }
         }
 
@@ -121,12 +121,13 @@ namespace Assignment
         /// <returns></returns>
         public Member[] toArray()
         {
-            if(memberArray.Length != Number)
+            if(oldCheck != newCheck)
             {
                 int i = 0;
                 Member[] newmemberArray = new Member[Number];
                 InOrderTraverse(root, ref newmemberArray, ref i);
                 memberArray = newmemberArray;
+                oldCheck = newCheck;
             }
             return memberArray;
         }

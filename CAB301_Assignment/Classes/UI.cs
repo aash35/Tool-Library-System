@@ -25,7 +25,8 @@ namespace Assignment
             toolTypes = toolTypeStrings;
 
             //need to add to systemLibrary too
-            registerMembers.add(new Member("user","user","12321","0000"));
+            registerMembers.add(new Member("a","a","12321","0000"));
+            registerMembers.add(new Member("b", "b", "12321", "0000"));
 
             string userSelection = "";
             string userFeedback = "";
