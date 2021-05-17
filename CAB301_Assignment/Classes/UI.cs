@@ -12,21 +12,12 @@ namespace Assignment
         private MemberCollection registerMembers = new MemberCollection();
         private Member loginUser = null;
 
-        //might not need these two
-        private string[] categories;
-        private string[][] toolTypes;
-
-        public UI(ToolLibrarySystem toolLibrarySystem, string[] categoryStrings, string[][] toolTypeStrings )
+        public UI(ToolLibrarySystem toolLibrarySystem )
         {
             systemLibrary = toolLibrarySystem;
             
-            //might not need these two
-            categories = categoryStrings;
-            toolTypes = toolTypeStrings;
-
-            //need to add to systemLibrary too
-            registerMembers.add(new Member("a","a","12321","0000"));
-            registerMembers.add(new Member("b", "b", "12321", "0000"));
+            /************TESTING METHODS*************/
+            //testMembers();
 
             string userSelection = "";
             string userFeedback = "";
@@ -55,6 +46,259 @@ namespace Assignment
             } while (menuLoop == true);
         }
 
+        private string printMainMenu(ref string userFeedback)
+        {
+            Console.WriteLine("Welcome to the Tool Library");
+            Console.WriteLine();
+            Console.WriteLine("========Main Menu========");
+            Console.WriteLine("1. Staff Login");
+            Console.WriteLine("2. Member Login");
+            Console.WriteLine("0. Exit");
+            Console.WriteLine("=========================");
+            Console.WriteLine();
+            if (userFeedback.Length > 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(userFeedback);
+                Console.ResetColor();
+                Console.WriteLine();
+                userFeedback = "";
+            }
+            Console.Write("Please make a selection(1 - 2, or 0 to exit): ");
+            string k = Console.ReadLine();
+
+
+            while (!k.Equals("0") & !k.Equals("1") & !k.Equals("2"))
+            {
+                Console.WriteLine("Please enter a valid menu option");
+                k = Console.ReadLine();
+            }
+            return k;
+        }
+
+
+        /******STAFF METHODS******/
+        private void displayStaffLogin(ref bool menuLoop, ref string userFeedback)
+        {
+
+            Console.Clear();
+            Console.WriteLine("Tool Library System - Staff Login Page");
+            Console.WriteLine("======================================");
+            Console.WriteLine();
+            Console.WriteLine();
+
+            Console.Write("Enter staff login: ");
+            string username = Console.ReadLine();
+            Console.Write("Enter staff password: ");
+            string password = Console.ReadLine();
+            if (username.Equals("staff") & password.Equals("today123"))
+            {
+                displayStaffMenu(ref menuLoop);
+            }
+            else
+            {
+                userFeedback = "Incorrect Staff Login";
+                menuLoop = true;
+            }
+        }
+        private void displayStaffMenu(ref bool menuLoop)
+        {
+
+            bool staffMenuLoop = false;
+            do
+            {
+                Console.Clear();
+                staffMenuLoop = false;
+
+                Console.WriteLine("Welcome to the Tool Library");
+                Console.WriteLine();
+                Console.WriteLine("========Staff Menu========");
+                Console.WriteLine("1. Add a new tool");
+                Console.WriteLine("2. Add new pieces of an existing tool");
+                Console.WriteLine("3. Remove some pieces of a tool");
+                Console.WriteLine("4. Register a new member");
+                Console.WriteLine("5. Remove a member");
+                Console.WriteLine("6. Show tools member has on loan");
+                Console.WriteLine("0. Return to main menu");
+                Console.WriteLine("=========================");
+                Console.WriteLine();
+                Console.Write("Please make a selection(1 - 6, or 0 to exit): ");
+                string k = Console.ReadLine();
+                while (!k.Equals("0") & !k.Equals("1") & !k.Equals("2")
+                    & !k.Equals("3") & !k.Equals("4") & !k.Equals("5") & !k.Equals("6"))
+                {
+                    Console.WriteLine("Please enter a valid menu option");
+                    k = Console.ReadLine();
+                }
+                if (k.Equals("0"))
+                {
+                    menuLoop = true;
+                }
+                else if (k.Equals("1"))
+                {
+                    Tool aTool = new Tool("Empty", 1);
+                    Console.Clear();
+                    Console.WriteLine("Library System - Add Tool");
+                    Console.WriteLine("===========================================");
+                    Console.WriteLine();
+                    Console.Write("Enter the name of the new Tool (0 to exit): ");
+                    string name = Console.ReadLine();
+                    while (name.Equals(""))
+                    {
+                        Console.WriteLine("Please enter a valid name or option");
+                        name = Console.ReadLine();
+                    }
+                    if (!name.Equals("0"))
+                    {
+                        aTool.Name = name;
+                        systemLibrary.add(aTool);
+                    }
+                    staffMenuLoop = true;
+
+                }
+                else if (k.Equals("2"))
+                {
+                    Tool aTool = new Tool("Empty", 1);
+                    int quantity = 0;
+                    systemLibrary.add(aTool, quantity);
+                    staffMenuLoop = true;
+                }
+                else if (k.Equals("3"))
+                {
+                    Tool aTool = new Tool("Empty", 1);
+                    int quantity = 0;
+                    systemLibrary.delete(aTool, quantity);
+                    staffMenuLoop = true;
+                }
+                else if (k.Equals("4"))
+                {
+                    Console.Clear();
+                    Console.WriteLine("Library System - Add New Member");
+                    Console.WriteLine("===========================================");
+                    Console.WriteLine();
+                    Console.Write("Enter the first name of the new member (blank to exit): ");
+                    string firstName = Console.ReadLine();
+                    if (!firstName.Equals(""))
+                    {
+                        Console.WriteLine();
+                        Console.Write("Enter the last name of the new member: ");
+                        string lastName = Console.ReadLine();
+
+                        Console.WriteLine();
+                        Console.Write("Enter the phone number of the new member (no spaces and no calling code): ");
+                        string phoneNumber = Console.ReadLine();
+                        int phoneCheck;
+                        bool phoneSuccess = Int32.TryParse(phoneNumber, out phoneCheck);
+
+                        while (phoneSuccess == false | phoneNumber.Length != 10)
+                        {
+                            Console.WriteLine("Please enter a valid phone number (10 digits long, no area code)");
+                            phoneNumber = Console.ReadLine();
+                            phoneSuccess = Int32.TryParse(phoneNumber, out phoneCheck);
+                        }
+
+                        Console.WriteLine();
+                        Console.Write("Enter the four digit pin of the new member: ");
+                        string memberPin = Console.ReadLine();
+                        int pinCheck;
+                        bool pinSuccess = Int32.TryParse(memberPin, out pinCheck);
+
+                        while (pinSuccess == false | memberPin.Length != 4)
+                        {
+                            Console.WriteLine("Please enter a valid PIN (4 digits long)");
+                            memberPin = Console.ReadLine();
+                            pinSuccess = Int32.TryParse(memberPin, out pinCheck);
+                        }
+
+                        Console.WriteLine();
+                        Console.Write("Confirm new member (y/n): ");
+                        string confirmChar = Console.ReadLine();
+                        while (!(confirmChar.Equals("Y") | confirmChar.Equals("N") | confirmChar.Equals("y") | confirmChar.Equals("n")))
+                        {
+                            Console.WriteLine("Please enter a valid option (y/n)");
+                            confirmChar = Console.ReadLine();
+                        }
+                        if (confirmChar.Equals("y") | confirmChar.Equals("Y"))
+                        {
+                            Member newMember = new Member(firstName, lastName, phoneNumber, memberPin);
+                            bool searchMembers = registerMembers.search(newMember);
+                            if (searchMembers == false)
+                            {
+                                registerMembers.add(newMember);
+                                systemLibrary.add(newMember);
+                                Console.WriteLine();
+                                Console.WriteLine("New Member Added");
+                            }
+                            else
+                            {
+                                Console.WriteLine();
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("Member already in system");
+                                Console.ResetColor();
+                                Console.WriteLine();
+                            }
+                        }
+
+                    }
+                    Console.Write("Hit any key to return to menu");
+                    Console.ReadKey();
+                    staffMenuLoop = true;
+                }
+                else if (k.Equals("5"))
+                {
+                    Console.Clear();
+                    Console.WriteLine("Library System - Remove a Member");
+                    Console.WriteLine("===========================================");
+                    Console.WriteLine();
+                    int numberOfBorrowed = 0;
+                    Member targetMember = displayAndSelectMember(ref numberOfBorrowed);
+
+                    if (targetMember != null)
+                    {
+                        if (!(numberOfBorrowed > 0))
+                        {
+
+                            systemLibrary.delete(targetMember);
+                            registerMembers.delete(targetMember);
+                            Console.WriteLine();
+                            Console.WriteLine("Member Removed");
+                            Console.WriteLine();
+                        }
+                        else
+                        {
+                            Console.WriteLine();
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Member is currently borrowing tools (cant remove until all items are returned)");
+                            Console.ResetColor();
+                            Console.WriteLine();
+                        }
+
+                    }
+                    Console.Write("Hit any key to return to menu");
+                    Console.ReadKey();
+                    staffMenuLoop = true;
+                }
+                else if (k.Equals("6"))
+                {
+                    Console.Clear();
+                    Console.WriteLine("Library System - Remove a Member");
+                    Console.WriteLine("===========================================");
+                    Console.WriteLine();
+                    int numberOfBorrowed = 0;
+                    Member targetMember = displayAndSelectMember(ref numberOfBorrowed);
+
+                    if (targetMember != null)
+                    {
+                        systemLibrary.displayBorrowingTools(targetMember);
+                    }
+                    staffMenuLoop = true;
+                }
+
+            } while (staffMenuLoop == true);
+
+        }
+
+        /******MEMBER METHODS******/
         private void displayMemberLogin(ref bool menuLoop, ref string userFeedback)
         {
             Console.Clear();
@@ -193,233 +437,20 @@ namespace Assignment
         }
 
 
-        
-        private void displayStaffLogin(ref bool menuLoop, ref string userFeedback)
-        {
-
-            Console.Clear();
-            Console.WriteLine("Tool Library System - Staff Login Page");
-            Console.WriteLine("======================================");
-            Console.WriteLine();
-            Console.WriteLine();
-
-            Console.Write("Enter staff login: ");
-            string username = Console.ReadLine();
-            Console.Write("Enter staff password: ");
-            string password = Console.ReadLine();
-            if (username.Equals("staff") & password.Equals("today123"))
-            {
-                displayStaffMenu(ref menuLoop);
-            }
-            else
-            {
-                userFeedback = "Incorrect Staff Login";
-                menuLoop = true;
-            }
-        }
-        private void displayStaffMenu(ref bool menuLoop)
-        {
-
-            bool staffMenuLoop = false;
-            do
-            {
-                Console.Clear();
-                staffMenuLoop = false;
-
-                Console.WriteLine("Welcome to the Tool Library");
-                Console.WriteLine();
-                Console.WriteLine("========Staff Menu========");
-                Console.WriteLine("1. Add a new tool");
-                Console.WriteLine("2. Add new pieces of an existing tool");
-                Console.WriteLine("3. Remove some pieces of a tool");
-                Console.WriteLine("4. Register a new member");
-                Console.WriteLine("5. Remove a member");
-                Console.WriteLine("6. Show tools member has on loan");
-                Console.WriteLine("0. Return to main menu");
-                Console.WriteLine("=========================");
-                Console.WriteLine();
-                Console.Write("Please make a selection(1 - 6, or 0 to exit): ");
-                string k = Console.ReadLine();
-                while (!k.Equals("0") & !k.Equals("1") & !k.Equals("2")
-                    & !k.Equals("3") & !k.Equals("4") & !k.Equals("5") & !k.Equals("6"))
-                {
-                    Console.WriteLine("Please enter a valid menu option");
-                    k = Console.ReadLine();
-                }
-                if (k.Equals("0"))
-                {
-                    menuLoop = true;
-                }
-                else if (k.Equals("1"))
-                {
-                    Tool aTool = new Tool("Empty", 1);
-                    Console.Clear();
-                    Console.WriteLine("Library System - Add Tool");
-                    Console.WriteLine("===========================================");
-                    Console.WriteLine();
-                    Console.Write("Enter the name of the new Tool (0 to exit): ");
-                    string name = Console.ReadLine();
-                    while (name.Equals(""))
-                    {
-                        Console.WriteLine("Please enter a valid name or option");
-                        name = Console.ReadLine();
-                    }
-                    if (!name.Equals("0"))
-                    {
-                        aTool.Name = name;
-                        systemLibrary.add(aTool);
-                    }
-                    staffMenuLoop = true;
-
-                }
-                else if (k.Equals("2"))
-                {
-                    Tool aTool = new Tool("Empty", 1);
-                    int quantity = 0;
-                    systemLibrary.add(aTool, quantity);
-                    staffMenuLoop = true;
-                }
-                else if (k.Equals("3"))
-                {
-                    Tool aTool = new Tool("Empty", 1);
-                    int quantity = 0;
-                    systemLibrary.delete(aTool, quantity);
-                    staffMenuLoop = true;
-                }
-                else if (k.Equals("4"))
-                {
-                    Console.Clear();
-                    Console.WriteLine("Library System - Add New Member");
-                    Console.WriteLine("===========================================");
-                    Console.WriteLine();
-                    Console.Write("Enter the first name of the new member (blank to exit): ");
-                    string firstName = Console.ReadLine();
-                    if (!firstName.Equals(""))
-                    {
-                        Console.WriteLine();
-                        Console.Write("Enter the last name of the new member: ");
-                        string lastName = Console.ReadLine();
-
-                        Console.WriteLine();
-                        Console.Write("Enter the phone number of the new member (no spaces and no calling code): ");
-                        string phoneNumber = Console.ReadLine();
-                        int phoneCheck;
-                        bool phoneSuccess = Int32.TryParse(phoneNumber, out phoneCheck);
-
-                        while (phoneSuccess == false | phoneNumber.Length != 10)
-                        {
-                            Console.WriteLine("Please enter a valid phone number (10 digits long, no area code)");
-                            phoneNumber = Console.ReadLine();
-                            phoneSuccess = Int32.TryParse(phoneNumber, out phoneCheck);
-                        }
-
-                        Console.WriteLine();
-                        Console.Write("Enter the four digit pin of the new member: ");
-                        string memberPin = Console.ReadLine();
-                        int pinCheck;
-                        bool pinSuccess = Int32.TryParse(memberPin, out pinCheck);
-
-                        while (pinSuccess == false | memberPin.Length != 4)
-                        {
-                            Console.WriteLine("Please enter a valid PIN (4 digits long)");
-                            memberPin = Console.ReadLine();
-                            pinSuccess = Int32.TryParse(memberPin, out pinCheck);
-                        }
-
-                        Console.WriteLine();
-                        Console.Write("Confirm new member (y/n): ");
-                        string confirmChar = Console.ReadLine();
-                        while (!(confirmChar.Equals("Y")| confirmChar.Equals("N") | confirmChar.Equals("y") | confirmChar.Equals("n")))
-                        {
-                            Console.WriteLine("Please enter a valid option (y/n)");
-                            confirmChar = Console.ReadLine();
-                        }
-                        if (confirmChar.Equals("y") | confirmChar.Equals("Y"))
-                        {
-                            Member newMember = new Member(firstName, lastName, phoneNumber, memberPin);
-                            bool searchMembers = registerMembers.search(newMember);
-                            if(searchMembers == false)
-                            {
-                                registerMembers.add(newMember);
-                                systemLibrary.add(newMember);
-                                Console.WriteLine();
-                                Console.WriteLine("New Member Added");
-                            }
-                            else
-                            {
-                                Console.WriteLine();
-                                Console.ForegroundColor = ConsoleColor.Red;
-                                Console.WriteLine("Member already in system");
-                                Console.ResetColor();
-                                Console.WriteLine();
-                            }
-                        }
-                        
-                    }
-                    Console.Write("Hit any key to return to menu");
-                    Console.ReadKey();
-                    staffMenuLoop = true;
-                }
-                else if (k.Equals("5"))
-                {
-                    Console.Clear();
-                    Console.WriteLine("Library System - Remove a Member");
-                    Console.WriteLine("===========================================");
-                    Console.WriteLine();
-                    int numberOfBorrowed = 0;
-                    Member targetMember = displayAndSelectMember(ref numberOfBorrowed);
-
-                    if(targetMember != null)
-                    {
-                        if (!(numberOfBorrowed > 0))
-                        {
-
-                            systemLibrary.delete(targetMember);
-                            registerMembers.delete(targetMember);
-                            Console.WriteLine();
-                            Console.WriteLine("Member Removed");
-                            Console.WriteLine();
-                        }
-                        else
-                        {
-                            Console.WriteLine();
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Member is currently borrowing tools (cant remove until all items are returned)");
-                            Console.ResetColor();
-                            Console.WriteLine();
-                        }
-
-                    }
-                    Console.Write("Hit any key to return to menu");
-                    Console.ReadKey();
-                    staffMenuLoop = true;
-                }
-                else if (k.Equals("6"))
-                {
-                    Console.Clear();
-                    Console.WriteLine("Library System - Remove a Member");
-                    Console.WriteLine("===========================================");
-                    Console.WriteLine();
-                    int numberOfBorrowed = 0;
-                    Member targetMember = displayAndSelectMember(ref numberOfBorrowed);
-
-                    if (targetMember != null)
-                    {
-                        systemLibrary.displayBorrowingTools(targetMember);
-                    }
-                    staffMenuLoop = true;
-                }
-
-            } while (staffMenuLoop == true);
-
-        }
-
+        /******HELPER METHODS******/
+        /// <summary>
+        /// Displays all registered member and how many tool they are currently borrowing.
+        /// select one of the members to be returned to the calling method
+        /// </summary>
+        /// <param name="numberOfBorrowed">will have the number of borrowed tools
+        /// when a member is selected</param>
+        /// <returns>a member that the user selects</returns>
         private Member displayAndSelectMember(ref int numberOfBorrowed)
         {
             Member[] arrayRegisteredMember = registerMembers.toArray();
-            List<int> parallelBorrowNumbers = new List<int>(); 
+            List<int> parallelBorrowNumbers = new List<int>();
             int borrowCount = 0;
-            if(arrayRegisteredMember.Length > 0)
+            if (arrayRegisteredMember.Length > 0)
             {
 
                 for (int i = 0; i < arrayRegisteredMember.Length; i++)
@@ -478,34 +509,13 @@ namespace Assignment
 
         }
 
-        private string printMainMenu(ref string userFeedback)
+        /// <summary>
+        /// Use in conjuction with test methods in the ToolLibrarySystem Constructor
+        /// </summary>
+        private void testMembers()
         {
-            Console.WriteLine("Welcome to the Tool Library");
-            Console.WriteLine();
-            Console.WriteLine("========Main Menu========");
-            Console.WriteLine("1. Staff Login");
-            Console.WriteLine("2. Member Login");
-            Console.WriteLine("0. Exit");
-            Console.WriteLine("=========================");
-            Console.WriteLine();
-            if (userFeedback.Length > 0)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(userFeedback);
-                Console.ResetColor();
-                Console.WriteLine();
-                userFeedback = "";
-            }
-            Console.Write("Please make a selection(1 - 2, or 0 to exit): ");
-            string k = Console.ReadLine();
-
-            
-            while (!k.Equals("0") & !k.Equals("1") & !k.Equals("2"))
-            {
-                Console.WriteLine("Please enter a valid menu option");
-                k = Console.ReadLine();
-            }
-            return k;
+            registerMembers.add(new Member("a", "a", "12321", "0000"));
+            registerMembers.add(new Member("b", "b", "12321", "0000"));
         }
     }
 }

@@ -36,12 +36,12 @@ namespace Assignment
             categories = libraryCategories;
             toolTypes = libraryToolTypes;
 
-            testTools();
-            testTopThree();
+            /***********TESTING METHODS************/
+            //testTools();
+            //testMembersAndTopThree();
         }
 
-        /////////////////////////////////////////////////////start of finished
-
+        /******PUBLIC METHODS******/
         /// <summary>
         /// Select a category and tool type to added a new tool too
         /// if the tool already exists, then it wont add
@@ -599,19 +599,24 @@ namespace Assignment
             Console.WriteLine();
             Console.WriteLine();
             Tool[] listOfBorrowedTools = borrowedTools.toArray();
-            List<Tool> noNullTools = new List<Tool>();
-            for (int i = 0; i < listOfBorrowedTools.Length; i++)
+            groupAndRemoveNull(ref listOfBorrowedTools);
+            if(listOfBorrowedTools.Length > 0)
             {
-                if (listOfBorrowedTools[i] != null)
+                Tool[] topThree = heapSort(listOfBorrowedTools);
+                for (int i = 0; i < topThree.Length; i++)
                 {
-                    noNullTools.Add(listOfBorrowedTools[i]);
+                    if(topThree[i] != null)
+                    {
+                        Console.WriteLine("{0}. {1} --- Borrowed {2} {3}", i + 1, topThree[i].Name, topThree[i].NoBorrowings, topThree[i].NoBorrowings > 1 ? "times" : "time");
+                    }
                 }
-            }
-            listOfBorrowedTools = noNullTools.ToArray();
-            Tool[] topThree = heapSort(listOfBorrowedTools);
-            for(int i = 0; i < topThree.Length; i++)
+            } 
+            else
             {
-                Console.WriteLine("{0}. {1} --- Borrowed {2} {3}", i+1, topThree[i].Name, topThree[i].NoBorrowings, topThree[i].NoBorrowings > 1 ? "times" : "time");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("No tools have been borrowed");
+                Console.ResetColor();
+
             }
 
             Console.WriteLine();
@@ -725,11 +730,10 @@ namespace Assignment
                 //delete the memeber from tool borrowlist (need to find the tool first, different from the above aTool)
             }
         }
-        /////////////////////////////////////////////////////end of finished
 
 
 
-        //********PRIVATE METHODS ************//
+        /******PRIVATE HELPER METHODS******/
         private Tool fullLibraryToolNameSearch(string Tool)
         {
             List<ToolCollection[]> allCategories = new List<ToolCollection[]>();
@@ -912,12 +916,12 @@ namespace Assignment
         private Tool[] heapSort(Tool[] listOfBorrowedTools)
         {
             Tool[] topThree = new Tool[3];
-            HeapBottomUp(listOfBorrowedTools);
+            heapBottomUp(listOfBorrowedTools);
 
             int counter = 0;
             for (int i = 0; i <= listOfBorrowedTools.Length - 1; i++)
             {
-                MaxKeyDelete(listOfBorrowedTools, listOfBorrowedTools.Length - i, counter, topThree);
+                maxKeyDelete(listOfBorrowedTools, listOfBorrowedTools.Length - i, counter, topThree);
                 counter++;
                 if (counter == 3)
                 {
@@ -926,7 +930,7 @@ namespace Assignment
             }
             return topThree;
         }
-        private void HeapBottomUp(Tool[] data)  //Note: In the algorithm, the array index starts from 1
+        private void heapBottomUp(Tool[] data)
         {
             int n = data.Length;
             for (int i = (n - 1) / 2; i >= 0; i--)
@@ -951,8 +955,8 @@ namespace Assignment
                 data[k] = v;
             }
         }
-        //delete the maximum key and rebuild the heap
-        private void MaxKeyDelete(Tool[] data, int size, int counter, Tool[] topThree)
+
+        private void maxKeyDelete(Tool[] data, int size, int counter, Tool[] topThree)
         {
             topThree[counter] = data[0];
             //Exchange the root’s key with the last key K of the heap;
@@ -992,7 +996,21 @@ namespace Assignment
             data[k] = v;
         }
 
-        private void testTopThree()
+        private void groupAndRemoveNull(ref Tool[] listOfBorrowedTools)
+        {
+            List<Tool> noNullTools = new List<Tool>();
+            for (int i = 0; i < listOfBorrowedTools.Length; i++)
+            {
+                if (listOfBorrowedTools[i] != null)
+                {
+                    noNullTools.Add(listOfBorrowedTools[i]);
+                }
+            }
+            listOfBorrowedTools = noNullTools.ToArray();
+        }
+
+        /******TEST METHODS******/
+        private void testMembersAndTopThree()
         {
             Member memberA = new Member("a", "a", "12321", "0000");
             Member memberB = new Member("b", "b", "12321", "0000");
@@ -1099,9 +1117,6 @@ namespace Assignment
             flooringTools[5].add(new Tool("Unbeatable Tiling Tool", 5));
             flooringTools[5].add(new Tool("King Tiling Tool", 5));
         }
-
-
-       
 
     }
 
