@@ -1,10 +1,10 @@
 # Tool Library System
 CAB301 - Algorithms and Complexity
 
-This system makes use of different algorithmic techniques and data structures to create a library system that adheres to predefined interfaces. With the given interfaces we were to create unquie solutions to a set of problem while keeping the time complexity low. The main feature of the program was the "most borrowed tools" section. For this feature a heapsort algorithm was incorporated to keep the time complexity as `O(nlogn)`.
-
 ### Languages/Frameworks
 - C#
+
+This system makes use of different algorithmic techniques and data structures to create a library system that adheres to predefined interfaces. With the given interfaces we were to create unquie solutions to a set of problem while keeping the time complexity low. The main feature of the program was the "most borrowed tools" section. For this feature a heapsort algorithm was incorporated to keep the time complexity as `O(nlogn)`.
 
 ### Default Admin Credentials:
 - **User** - staff
